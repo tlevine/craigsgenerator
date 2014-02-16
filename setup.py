@@ -17,5 +17,5 @@ setup(name='craigsgenerator',
     install_requires = ['nose','lxml'],
 
     version='0.0.1',
-    license='MIT'
+    license='AGPL'
 )
