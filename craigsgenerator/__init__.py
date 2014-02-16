@@ -6,8 +6,11 @@ from craigsgenerator.cache import get
 from craigsgenerator.parse import search_row
 
 class Section:
-    def __init__(self, subdomain):
+    def __init__(self, subdomain, *args, cachedir = 'craigslist', **kwargs):
         self.subdomain = subdomain
+        self.cachedir = cachedir
+        self.args = args
+        self.kwargs = kwargs
 
     def __iter__(self):
         self.buffer = []
@@ -28,7 +31,7 @@ class Section:
 
     def download(self):
         self.present_search_url = self.next_search_url()
-        fp = get(self.present_search_url)
+        fp = get(self.cachedir, self.present_search_url, False, *self.args, **self.kwargs)
 
         html = lxml.html.fromstring(fp.read())
         html.make_links_absolute(self.present_search_url)
