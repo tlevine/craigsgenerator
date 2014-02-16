@@ -3,6 +3,7 @@ import re
 import lxml.html
 
 from craigsgenerator.cache import get
+from craigsgenerator.parse import search_row
 
 class Section:
     def __init__(self, subdomain):
@@ -17,7 +18,7 @@ class Section:
     def __next__(self):
         if self.buffer == []:
             self.download()
-            self.buffer.extend(map(str,self.html.xpath('//p[@class="row"]/a/@href')))
+            self.buffer.extend(map(search_row,self.html.xpath('//p[@class="row"]')))
 
         if self.html.xpath('count(//p[@class="row"])') == 0:
             logger.debug('Stopped at %s' % self.present_search_url)
