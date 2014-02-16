@@ -6,8 +6,9 @@ from craigsgenerator.cache import get
 from craigsgenerator.parse import search_row
 
 class Section:
-    def __init__(self, subdomain, *args, cachedir = 'craigslist', **kwargs):
+    def __init__(self, subdomain, section, *args, cachedir = 'craigslist', **kwargs):
         self.subdomain = subdomain
+        self.section = section
         self.cachedir = cachedir
         self.args = args
         self.kwargs = kwargs
@@ -40,7 +41,7 @@ class Section:
     def next_search_url(self):
         'Determine the url of the next search page.'
         if not self.html:
-            return 'https://%s.craigslist.org/sub/index000.html' % self.subdomain
+            return 'https://%s.craigslist.org/%s/index000.html' % (self.subdomain, self.section)
 
         nexts = set(self.html.xpath('//a[contains(text(),"next >")]/@href'))
         if len(nexts) != 1:
