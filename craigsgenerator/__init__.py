@@ -2,7 +2,7 @@ import re
 
 import lxml.html
 
-from cache import get
+from craigsgenerator.cache import get
 
 class Section:
     def __init__(self, subdomain):

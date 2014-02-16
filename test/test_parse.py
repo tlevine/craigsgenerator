@@ -17,3 +17,4 @@ def test_search_row_with_location():
         'title': 'Pre-leasing Apt in WEST CAMPUS for Summer 2014',
         'price': 925,
     }
+    assert o == e
