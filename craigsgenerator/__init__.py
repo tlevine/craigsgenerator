@@ -28,11 +28,14 @@ class Section:
             logger.debug('Stopped at %s' % self.present_search_url)
             raise StopIteration
         else:
-            return self.buffer.pop(0)
+            row = self.buffer.pop(0)
+            row['listing'] = get(self.cachedir, row['href'],
+                                 False, *self.args, **self.kwargs)
+            return row
 
     def download(self):
         self.present_search_url = self.next_search_url()
-        fp = get(self.cachedir, self.present_search_url, False, *self.args, **self.kwargs)
+        fp = get(self.cachedir, self.present_search_url, True, *self.args, **self.kwargs)
 
         html = lxml.html.fromstring(fp.read())
         html.make_links_absolute(self.present_search_url)

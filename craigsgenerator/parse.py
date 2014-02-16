@@ -23,21 +23,3 @@ def search_row(p):
     ('price','span[@class="l2"]/span[@class="price"]/text()'),
 
     return row
-
-
-'''
- <p class="row" data-latitude="30.174300" data-longitude="-97.822500" data-pid="4328170456">
-    <a href="/sub/4328170456.html" class="i" data-id="0:00V0V_bJm3ol0z8rY" </a>
-    <span class="star"></span>
-    <span class="pl">
-        <span class="date">Feb 15</span>
-        <a href="/sub/4328170456.html">**Exceptional LIVING - 2bd/ 2ba LUXURY</a>
-    </span>
-    <span class="l2">
-        <span class="price">&#x0024;1400</span>
-        / 2br - 1230ft&sup2; -
-        <span class="pnr"> <small> (austin)</small>
-            <span class="px">
-                <span class="p"> pic&nbsp;
-                    <a href="#" class="maptag" data-pid="4328170456">map</a></span></span> </span>  </span> </p>
-'''
