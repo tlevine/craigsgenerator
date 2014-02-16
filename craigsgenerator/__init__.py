@@ -5,8 +5,6 @@ import lxml.html
 from craigsgenerator.cache import get
 from craigsgenerator.parse import search_row
 
-__version__ = '0.0.0'
-
 class Section:
     def __init__(self, subdomain):
         self.subdomain = subdomain

@@ -16,6 +16,6 @@ setup(name='craigsgenerator',
 
     install_requires = ['nosetests','lxml'],
 
-    version=craigsgenerator.__version__,
+    version='0.0.0',
     license='MIT'
 )
