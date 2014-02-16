@@ -3,7 +3,7 @@ import re
 import lxml.html
 
 from craigsgenerator.cache import get
-from craigsgenerator.parse import search_row
+from craigsgenerator.parse import search_row, listing
 
 class Section:
     def __init__(self, subdomain, section, *args, cachedir = 'craigslist', **kwargs):
@@ -50,3 +50,8 @@ class Section:
         if len(nexts) != 1:
             raise ValueError('No next page for %s' % self.search_url)
         return str(list(nexts)[0])
+
+def fulltext(row):
+    'Given a row from the Section generator, produce the full text of the listing.'
+    html = lxml.html.fromstring(row['listing'].read())
+    return listing(html)

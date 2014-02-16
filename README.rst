@@ -31,3 +31,4 @@ Disable caching by setting the ``cachedir`` to ``None``.
     for listing in Section('oakland','sub', cachedir = None):
         print(listing)
 
+Get the full text of the listing with the

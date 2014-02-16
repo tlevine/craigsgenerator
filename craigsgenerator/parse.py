@@ -23,3 +23,7 @@ def search_row(p):
     ('price','span[@class="l2"]/span[@class="price"]/text()'),
 
     return row
+
+def listing(html):
+    postingbody = html.get_element_by_id('postingbody')
+    return postingbody.text_content()
