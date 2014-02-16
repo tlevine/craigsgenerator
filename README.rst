@@ -31,4 +31,9 @@ Disable caching by setting the ``cachedir`` to ``None``.
     for listing in Section('oakland','sub', cachedir = None):
         print(listing)
 
-Get the full text of the listing with the
+Get the full text of the listing with the ``fulltext`` function.
+
+    from craigsgenerator import Section
+    for listing in Section('oakland','sub'):
+        print(listing)
+        print(fulltext(listing))
