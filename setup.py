@@ -14,7 +14,7 @@ setup(name='craigsgenerator',
     ],
     packages=['craigsgenerator'],
 
-    install_requires = ['nosetests','lxml'],
+    install_requires = ['nose','lxml'],
 
     version='0.0.0',
     license='MIT'
