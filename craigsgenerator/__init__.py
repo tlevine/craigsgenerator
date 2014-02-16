@@ -1,13 +1,6 @@
-#!/usr/bin/env python3
-import datetime
-import warnings
-import os
-import sys
-from urllib.parse import urlparse
 import re
-import json
-import itertools
-import requests
+
+import lxml.html
 
 from cache import get
 
