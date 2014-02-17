@@ -61,7 +61,7 @@ class Section:
         nexts = set(self.html.xpath('//a[contains(text(),"next >")]/@href'))
         if len(nexts) == 0:
             return None
-        elif len(nexts) == 2:
+        elif len(nexts) == 1:
             return str(list(nexts)[0])
         else:
             raise ValueError('Unexpected number of next links (%d) at %s' % (len(nexts), self.present_search_url))
