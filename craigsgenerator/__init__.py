@@ -57,7 +57,7 @@ class Section:
 
         nexts = set(self.html.xpath('//a[contains(text(),"next >")]/@href'))
         if len(nexts) != 1:
-            raise ValueError('No next page for %s' % self.search_url)
+            raise ValueError('No next page for %s' % self.present_search_url)
         return str(list(nexts)[0])
 
 def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar'):
