@@ -35,7 +35,7 @@ Disable caching by setting the :code:`cachedir` to :code:`None`.
 
 .. code-block:: python
 
-    from craigsgenerator import Section
+    from craigsgenerator import Section, fulltext
     for listing in Section('austin','sub', cachedir = None):
         print(listing)
 
