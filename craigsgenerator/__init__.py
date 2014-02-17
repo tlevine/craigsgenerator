@@ -59,12 +59,12 @@ class Section:
             return '%s://%s.craigslist.org/%s/index000.html' % (self.scheme, self.subdomain, self.section)
 
         nexts = set(self.html.xpath('//a[contains(text(),"next >")]/@href'))
-        if nexts == []:
+        if len(nexts) == 0:
             return None
         elif len(nexts) == 2:
             return str(list(nexts)[0])
         else:
-            raise ValueError('Unexpected number of next links at %s' % self.present_search_url)
+            raise ValueError('Unexpected number of next links (%d) at %s' % (len(nexts), self.present_search_url))
 
 def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar'):
     results = set()
