@@ -63,7 +63,9 @@ def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id
     html = lxml.html.fromstring(fp.read())
     for href in html.xpath('id("%s")/descendant::a/@href' % id):
         p = urllib.parse.urlparse(href.rstrip('/'))
-        if p.path:
+        if p.fragment:
+            pass
+        elif p.path:
             results.update(subdomains(url = href, cachedir = cachedir, id = 'list'))
         else:
             print(p.netloc)
