@@ -36,6 +36,8 @@ class Section:
 
             self.download()
             self.buffer.extend(map(search_row,self.html.xpath('//p[@class="row"]')))
+            if self.buffer == []:
+                raise StopIteration
 
         row = self.buffer.pop(0)
         row['listing'] = get(self.cachedir, row['href'],
