@@ -16,6 +16,6 @@ setup(name='craigsgenerator',
 
     install_requires = ['requests','lxml'],
 
-    version='0.0.7',
+    version='0.0.8',
     license='AGPL'
 )
