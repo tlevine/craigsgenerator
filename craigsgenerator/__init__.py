@@ -1,11 +1,14 @@
 import re
 import os
 import urllib.parse
+#from logging import Logger
 
 import lxml.html
 
 from craigsgenerator.cache import get
 from craigsgenerator.parse import search_row, listing
+
+#logger = Logger('craigsgenerator')
 
 class Section:
     def __init__(self, subdomain, section, *args, cachedir = 'craigslist', scheme = 'https', **kwargs):
@@ -31,7 +34,7 @@ class Section:
             self.buffer.extend(map(search_row,self.html.xpath('//p[@class="row"]')))
 
         if self.html.xpath('count(//p[@class="row"])') == 0:
-            logger.debug('Stopped at %s' % self.present_search_url)
+           #logger.debug('Stopped at %s' % self.present_search_url)
             raise StopIteration
         else:
             row = self.buffer.pop(0)
