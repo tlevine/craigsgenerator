@@ -9,7 +9,7 @@ def get(cachedir, url, refresh, *args, **kwargs):
     if (cachedir == None) or (not os.path.exists(urldir)) or (os.listdir(urldir) == []):
         _download(cachedir, url, *args, **kwargs)
 
-    mostrecent = sorted(os.listdir(urldir))[-1]
+    mostrecent = sorted(filter(lambda f: os.path.isfile(os.path.join(urldir, f)), os.listdir(urldir)))[-1]
     if refresh and datetime.datetime.strptime(mostrecent, '%Y-%m-%d').date() < datetime.date.today():
         _download(cachedir, url, *args, **kwargs)
 

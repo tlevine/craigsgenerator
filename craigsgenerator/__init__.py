@@ -1,5 +1,6 @@
 import re
 import os
+import urllib.parse
 
 import lxml.html
 
@@ -56,18 +57,19 @@ class Section:
             raise ValueError('No next page for %s' % self.search_url)
         return str(list(nexts)[0])
 
+def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar'):
+    results = set()
+    fp = get(cachedir, url, False)
+    html = lxml.html.fromstring(fp.read())
+    for href in html.xpath('id("%s")/descendant::a/@href' % id):
+        p = urllib.parse.urlparse(href)
+        if p.path:
+            results.update(subdomains(url = href, cachedir = cachedir, id = 'list'))
+        else:
+            results.add(p.netloc)
+    return results
+
 def fulltext(row):
     'Given a row from the Section generator, produce the full text of the listing.'
     html = lxml.html.fromstring(row['listing'].read())
     return listing(html)
-
-def subdomains():
-    import requests
-    fn = 'homepage.html'
-    if not os.path.isfile(fn):
-        r = requests.get('https://sfbay.craigslist.org')
-        with open(fn, 'x') as fp:
-            fp.write(r.text)
-
-    html = lxml.html.fromstring(open(fn).read())
-    print(html.xpath('id("rightbar")/descendant::a/@href'))
