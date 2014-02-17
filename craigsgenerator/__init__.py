@@ -52,7 +52,7 @@ class Section:
 
     def next_search_url(self):
         'Determine the url of the next search page.'
-        if not self.html:
+        if self.html is not None:
             return '%s://%s.craigslist.org/%s/index000.html' % (self.scheme, self.subdomain, self.section)
 
         nexts = set(self.html.xpath('//a[contains(text(),"next >")]/@href'))
