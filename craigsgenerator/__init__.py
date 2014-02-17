@@ -1,4 +1,5 @@
 import re
+import os
 
 import lxml.html
 
@@ -59,3 +60,14 @@ def fulltext(row):
     'Given a row from the Section generator, produce the full text of the listing.'
     html = lxml.html.fromstring(row['listing'].read())
     return listing(html)
+
+def subdomains():
+    import requests
+    fn = 'homepage.html'
+    if not os.path.isfile(fn):
+        r = requests.get('https://sfbay.craigslist.org')
+        with open(fn, 'x') as fp:
+            fp.write(r.text)
+
+    html = lxml.html.fromstring(open(fn).read())
+    print(html.xpath('id("rightbar")/descendant::a/@href'))
