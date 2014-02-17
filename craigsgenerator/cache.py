@@ -13,7 +13,7 @@ def get(cachedir, url, refresh, *args, **kwargs):
     if refresh and datetime.datetime.strptime(mostrecent, '%Y-%m-%d').date() < datetime.date.today():
         _download(cachedir, url, *args, **kwargs)
 
-    return open(os.path.join(urldir, mostrecent), 'r')
+    return os.path.join(urldir, mostrecent)
 
 def _download(cachedir, url, date = datetime.date.today(), *args, **kwargs):
     directory = _url_to_directory(cachedir, url)

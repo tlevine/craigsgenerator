@@ -49,9 +49,8 @@ class Section:
         if url is None:
             raise ValueError('No next page for %s' % self.present_search_url)
         self.present_search_url = url
-        fp = get(self.cachedir, self.present_search_url, True, *self.args, **self.kwargs)
-
-        html = lxml.html.fromstring(fp.read())
+        with open(get(self.cachedir, self.present_search_url, True, *self.args, **self.kwargs)) as fp
+            html = lxml.html.fromstring(fp.read())
         html.make_links_absolute(self.present_search_url)
         self.html = html
 
@@ -70,8 +69,9 @@ class Section:
 
 def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar'):
     results = set()
-    fp = get(cachedir, url, False)
-    html = lxml.html.fromstring(fp.read())
+    with open(get(cachedir, url, False)) as fp:
+        html = lxml.html.fromstring(fp.read())
+
     for href in html.xpath('id("%s")/descendant::a/@href' % id):
         p = urllib.parse.urlparse(href.rstrip('/'))
         if p.fragment:
