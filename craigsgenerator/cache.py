@@ -23,7 +23,11 @@ def _download(cachedir, url, date = datetime.date.today(), *args, **kwargs):
 
     r = requests.get(url, *args, **kwargs)
     with open(filename, 'x') as f:
-        f.write(r.text)
+        try:
+            f.write(r.text)
+        except:
+            print(url)
+            raise
 
 def _url_to_directory(cachedir, url):
     p = urllib.parse.urlparse(url)
