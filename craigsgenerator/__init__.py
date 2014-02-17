@@ -49,7 +49,7 @@ class Section:
         if url is None:
             raise ValueError('No next page for %s' % self.present_search_url)
         self.present_search_url = url
-        with open(get(self.cachedir, self.present_search_url, True, *self.args, **self.kwargs)) as fp
+        with open(get(self.cachedir, self.present_search_url, True, *self.args, **self.kwargs)) as fp:
             html = lxml.html.fromstring(fp.read())
         html.make_links_absolute(self.present_search_url)
         self.html = html
