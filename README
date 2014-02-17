@@ -4,13 +4,17 @@ Read listings Pythonically.
 
 Examples
 ---------
-Generate listings. ::
+Generate listings.
+
+.. code-block:: python
 
     from craigsgenerator import Section
     for listing in Section('austin','sub'):
         print(listing)
 
-Additional arguments get passed to ``requests.get``. ::
+Additional arguments get passed to `requests.get`_.
+
+.. code-block:: python
 
     from craigsgenerator import Section
     proxies = {'https':'example.com'}
@@ -19,19 +23,25 @@ Additional arguments get passed to ``requests.get``. ::
 
 Downloaded files are cached by default and refreshed
 if they're older than a day. Change the directory by
-specifying the ``cachedir``. ::
+specifying the `cachedir`_.
+
+.. code-block:: python
 
     from craigsgenerator import Section
     for listing in Section('austin','sub', cachedir = 'downloads'):
         print(listing)
 
-Disable caching by setting the ``cachedir`` to ``None``. ::
+Disable caching by setting the `cachedir`_ to `None`_.
+
+.. code-block:: python
 
     from craigsgenerator import Section
     for listing in Section('austin','sub', cachedir = None):
         print(listing)
 
-Get the full text of the listing with the ``fulltext`` function. ::
+Get the full text of the listing with the `fulltext`_ function.
+
+.. code-block:: python
 
     from craigsgenerator import Section
     for listing in Section('austin','sub'):
