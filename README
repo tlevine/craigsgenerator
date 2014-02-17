@@ -1,5 +1,5 @@
 Craig's Generator
-======
+=================
 Read listings Pythonically.
 
 Examples
@@ -12,7 +12,7 @@ Generate listings.
     for listing in Section('austin','sub'):
         print(listing)
 
-Additional arguments get passed to `requests.get`_.
+Additional arguments get passed to :code:`requests.get`.
 
 .. code-block:: python
 
@@ -23,7 +23,7 @@ Additional arguments get passed to `requests.get`_.
 
 Downloaded files are cached by default and refreshed
 if they're older than a day. Change the directory by
-specifying the `cachedir`_.
+specifying the :code:`cachedir`.
 
 .. code-block:: python
 
@@ -31,7 +31,7 @@ specifying the `cachedir`_.
     for listing in Section('austin','sub', cachedir = 'downloads'):
         print(listing)
 
-Disable caching by setting the `cachedir`_ to `None`_.
+Disable caching by setting the :code:`cachedir` to :code:`None`.
 
 .. code-block:: python
 
@@ -39,7 +39,7 @@ Disable caching by setting the `cachedir`_ to `None`_.
     for listing in Section('austin','sub', cachedir = None):
         print(listing)
 
-Get the full text of the listing with the `fulltext`_ function.
+Get the full text of the listing with the :code:`fulltext` function.
 
 .. code-block:: python
 
