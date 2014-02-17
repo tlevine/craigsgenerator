@@ -30,20 +30,23 @@ class Section:
 
     def __next__(self):
         if self.buffer == []:
+            if self.next_search_url() is None:
+            #   logger.debug('Stopped at %s' % self.present_search_url)
+                raise StopIteration
+
             self.download()
             self.buffer.extend(map(search_row,self.html.xpath('//p[@class="row"]')))
 
-        if self.html.xpath('count(//p[@class="row"])') == 0:
-           #logger.debug('Stopped at %s' % self.present_search_url)
-            raise StopIteration
-        else:
-            row = self.buffer.pop(0)
-            row['listing'] = get(self.cachedir, row['href'],
-                                 False, *self.args, **self.kwargs)
-            return row
+        row = self.buffer.pop(0)
+        row['listing'] = get(self.cachedir, row['href'],
+                             False, *self.args, **self.kwargs)
+        return row
 
     def download(self):
-        self.present_search_url = self.next_search_url()
+        url = self.next_search_url()
+        if url is None:
+            raise ValueError('No next page for %s' % self.present_search_url)
+        self.present_search_url = url
         fp = get(self.cachedir, self.present_search_url, True, *self.args, **self.kwargs)
 
         html = lxml.html.fromstring(fp.read())
@@ -57,8 +60,7 @@ class Section:
 
         nexts = set(self.html.xpath('//a[contains(text(),"next >")]/@href'))
         if len(nexts) != 1:
-            raise ValueError('No next page for %s' % self.present_search_url)
-        return str(list(nexts)[0])
+            return str(list(nexts)[0])
 
 def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar'):
     results = set()
