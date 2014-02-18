@@ -60,14 +60,18 @@ class Section:
 
     def skip_downloaded(self):
         'Skip the things that have been downloaded; start iterating at things that have not been downloaded.'
-        date = datetime.date.today().isoformat()
+        today = datetime.date.today()
+        yesterday = datetime.date.today()
+
         sectiondir = os.path.join(self.cachedir, self.subdomain + '.craigslist.org', self.section)
         for index in sorted(filter(lambda x: x.startswith('index'), filter(os.path.isdir, os.listdir(sectiondir)))):
-            if os.path.exists(os.path.join(sectiondir, index, date)):
+            url = os.path.join(sectiondir, index)
+            if os.path.exists(os.path.join(url, today)) or os.path.exists(os.path.join(url, yesterday)):
                 self.present_search_url = '%s://%s.craigslist.org/%s/%s' % (self.scheme, self.subdomain, self.section, index)
             else:
                 break
-        self.download()
+        if self.present_search_url is not None:
+            self.download()
 
     def next_search_url(self):
         'Determine the url of the next search page.'
