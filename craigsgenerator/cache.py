@@ -6,16 +6,22 @@ import requests
 
 def get(cachedir, url, refresh, *args, **kwargs):
     urldir = _url_to_directory(cachedir, url)
+
+    today = datetime.date.today()
+    yesterday = today - datetime.timedelta(days = 1)
+
+    dl = lambda: _download(cachedir, url, today, *args, **kwargs)
+
     if (cachedir == None) or (not os.path.exists(urldir)) or (os.listdir(urldir) == []):
-        _download(cachedir, url, *args, **kwargs)
+        _dl()
 
     mostrecent = sorted(filter(lambda f: os.path.isfile(os.path.join(urldir, f)), os.listdir(urldir)))[-1]
-    if refresh and datetime.datetime.strptime(mostrecent, '%Y-%m-%d').date() < datetime.date.today():
-        _download(cachedir, url, *args, **kwargs)
+    if refresh and datetime.datetime.strptime(mostrecent, '%Y-%m-%d').date() < yesterday:
+        _dl()
 
     return os.path.join(urldir, mostrecent)
 
-def _download(cachedir, url, date = datetime.date.today(), *args, **kwargs):
+def _download(cachedir, url, date, *args, **kwargs):
     directory = _url_to_directory(cachedir, url)
     filename = os.path.join(directory, date.isoformat())
     if not os.path.exists(directory):
