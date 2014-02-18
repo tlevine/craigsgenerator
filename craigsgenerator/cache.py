@@ -12,7 +12,7 @@ def get(cachedir, url, refresh, *args, **kwargs):
 
     dl = lambda: _download(cachedir, url, today, *args, **kwargs)
 
-    if (cachedir == None) or (not os.path.exists(urldir)) or (os.listdir(urldir) == []):
+    if (not os.path.exists(urldir)) or (os.listdir(urldir) == []):
         _dl()
 
     mostrecent = sorted(filter(lambda f: os.path.isfile(os.path.join(urldir, f)), os.listdir(urldir)))[-1]
