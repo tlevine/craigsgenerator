@@ -79,7 +79,6 @@ def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id
         elif p.path:
             results.update(subdomains(url = href, cachedir = cachedir, id = 'list'))
         else:
-            print(p.netloc)
             results.add(p.netloc)
     return results
 
