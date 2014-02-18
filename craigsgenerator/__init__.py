@@ -63,7 +63,7 @@ class Section:
         date = datetime.date.today().isoformat()
         sectiondir = os.path.join(self.cachedir, self.subdomain + '.craigslist.org', self.section)
         for index in sorted(filter(lambda x: x.startswith('index'), filter(os.path.isdir, os.listdir(sectiondir)))):
-            if os.path.exists(os.path.join(sectiondir, index, date):
+            if os.path.exists(os.path.join(sectiondir, index, date)):
                 self.present_search_url = '%s://%s.craigslist.org/%s/%s' % (self.scheme, self.subdomain, self.section, index)
             else:
                 break
