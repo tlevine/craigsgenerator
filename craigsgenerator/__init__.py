@@ -2,6 +2,7 @@ import re
 import os
 import urllib.parse
 #from logging import Logger
+import datetime
 
 import lxml.html
 
@@ -34,6 +35,7 @@ class Section:
             #   logger.debug('Stopped at %s' % self.present_search_url)
                 raise StopIteration
 
+            self.bump_url()
             self.download()
             self.buffer.extend(map(search_row,self.html.xpath('//p[@class="row"]')))
             if self.buffer == []:
@@ -44,15 +46,28 @@ class Section:
                              False, *self.args, **self.kwargs)
         return row
 
-    def download(self):
+    def bump_url(self):
         url = self.next_search_url()
         if url is None:
             raise ValueError('No next page for %s' % self.present_search_url)
         self.present_search_url = url
+
+    def download(self):
         with open(get(self.cachedir, self.present_search_url, True, *self.args, **self.kwargs)) as fp:
             html = lxml.html.fromstring(fp.read())
         html.make_links_absolute(self.present_search_url)
         self.html = html
+
+    def skip_downloaded(self):
+        'Skip the things that have been downloaded; start iterating at things that have not been downloaded.'
+        date = datetime.date.today().isoformat()
+        sectiondir = os.path.join(self.cachedir, self.subdomain + '.craigslist.org', self.section)
+        for index in sorted(filter(lambda x: x.startswith('index'), filter(os.path.isdir, os.listdir(sectiondir)))):
+            if os.path.exists(os.path.join(sectiondir, index, date):
+                self.present_search_url = '%s://%s.craigslist.org/%s/%s' % (self.scheme, self.subdomain, self.section, index)
+            else:
+                break
+        self.download()
 
     def next_search_url(self):
         'Determine the url of the next search page.'
