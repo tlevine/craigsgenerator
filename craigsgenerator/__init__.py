@@ -101,7 +101,6 @@ def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id
             results.add(p.netloc)
     return results
 
-def fulltext(row):
+def html(row):
     'Given a row from the Section generator, produce the full text of the listing.'
-    html = lxml.html.fromstring(row['listing'].read())
-    return listing(html)
+    return lxml.html.fromstring(row['listing'].read())
