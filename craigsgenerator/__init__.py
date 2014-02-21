@@ -7,7 +7,7 @@ import datetime
 import lxml.html
 
 from craigsgenerator.cache import get
-from craigsgenerator.parse import search_row, listing
+from craigsgenerator.parse import search_row
 
 #logger = Logger('craigsgenerator')
 
