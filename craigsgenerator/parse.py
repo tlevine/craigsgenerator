@@ -24,6 +24,6 @@ def search_row(p):
 
     return row
 
-def listing(html):
+def body(html):
     postingbody = html.get_element_by_id('postingbody')
     return postingbody.text_content()
