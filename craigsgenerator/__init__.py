@@ -103,4 +103,6 @@ def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id
 
 def tohtml(row):
     'Given a row from the Section generator, produce the full text of the listing.'
-    return lxml.html.fromstring(row['listing'].read())
+    with open(row['listing']) as fp:
+        html = lxml.html.fromstring(fp.read())
+    return html
