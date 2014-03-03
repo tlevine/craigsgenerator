@@ -45,8 +45,12 @@ listing_testcases = [
         'posted':  datetime.datetime(2013, 11, 25,  0, 52, 38) + datetime.timedelta(hours = 5),
         'updated': datetime.datetime(2013, 12,  1, 21, 47, 39) + datetime.timedelta(hours = 5)
     }),
+    ('4223403463.html', {
+        'posted': datetime.datetime(2013, 12, 1, 18, 16, 46) + datetime.timedelta(hours = 5),
+    }),
 ]
 
 def test_listing():
+    'The listing parser should return a dict  with posted and updated datetimes, in UTC.'
     for fn, expected in listing_testcases:
         yield check_listing, fn, expected
