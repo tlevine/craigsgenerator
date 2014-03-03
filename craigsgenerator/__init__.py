@@ -11,34 +11,31 @@ import craigsgenerator.parse as parse
 
 #logger = Logger('craigsgenerator')
 
-def listing(url, cachedir = 'listings', scheme = 'https', get = requests.get):
-
-def section(subdomain, section, cachedir = 'sections', scheme = 'https', get = requests.get):
+def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get = requests.get, date_func = datetime.date):
     try:
-        if scheme not in {'http','https'}:
-            raise ValueError('Scheme must be one of "http" or "https".')
-
-        buffer = []
+        results = []
         html = None
-        present_search_url = None
+        warehouse = Warehouse(cachedir)
         while True:
-            if parse.next_search_url(scheme, subdomain, section, html) is None:
-                raise StopIteration
+            for result in results:
+                href = result.get('href')
+                if href is not None:
+                    response = download(get, warehouse, href, date_func()):
+                    html = parse.load_response(response)
+                    # result.update(parse.???(html))
+                    yield result
 
-            if bump_url()
-            self.download()
-            self.buffer.extend(map(search_row,self.html.xpath('//p[@class="row"]')))
-            if self.buffer == []:
-                raise StopIteration
+            url = parse.next_search_url(scheme, subdomain, section, html)
+            if url is None:
+                break
 
-        row = self.buffer.pop(0)
-        row['listing'] = get(self.cachedir, row['href'],
-                             False, *self.args, **self.kwargs)
-        return row
-
+            response = download.download(get, warehouse, url, date_func())
+            html = parse.load_response(response)
+            results.extend(parse.search(html))
+            if results == []:
+                break
     except GeneratorExit:
         pass
-
 
 def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar'):
     results = set()

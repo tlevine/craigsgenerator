@@ -1,6 +1,6 @@
 from urllib.parse import urlsplit
 
-def _cache(get, warehouse, url, date):
+def download(get, warehouse, url, date):
     '''
     In:
         get: function that takes a url and returns a python-requests Response
@@ -21,7 +21,7 @@ def _cache(get, warehouse, url, date):
         warehouse[key] = r
     return r
 
-def can_i_skip(warehouse, url, date):
-    'Can I skip the present request?'
+def already_downloaded(warehouse, url, date):
+    'Have I already made a similar enough request?'
     key = (url, d.strftime('%Y/%W'))
     return key in warehouse

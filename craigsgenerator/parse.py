@@ -7,6 +7,12 @@ SEARCH_ROW_ATTRS = [
     ('price','span[@class="l2"]/span[@class="price"]/text()', lambda x: int(x.strip('$',))),
 ]
 
+def search(html):
+    '''
+    HTML element ->  [HTML element]
+    '''
+    return map(search_row,html.xpath('//p[@class="row"]'))
+
 def search_row(p):
     'Parse a <p class="row"></p>.'
     row = {}
@@ -14,13 +20,6 @@ def search_row(p):
         results = p.xpath(attr)
         if len(results) == 1:
             row[key] = func(results[0])
-
-    ('href','a/@href'),
-    ('latitude', '@data-latitude'),
-    ('longitude', '@data-longitude'),
-    ('date','span[@class="pl"]/span[@class="date"]/text()'),
-    ('title','span[@class="pl"]/a/text()'),
-    ('price','span[@class="l2"]/span[@class="price"]/text()'),
 
     return row
 
