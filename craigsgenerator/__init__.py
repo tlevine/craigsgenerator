@@ -1,5 +1,27 @@
+from queue import Queue
 from craigsgenerator.generators import _listings, _sites
 
-def run(sites = _sites, listings = _listings, sections = ['sub'):
-    for site in sites(:
-        for listing in listings(:
+def craigsgenerator(sites = _sites, listings = _listings, sections = ['sub'], threaded = True):
+    results = Queue()
+    def worker(thesite, thesection):
+        for listing in thelistings(thesite, thesection):
+            results.put(listing)
+
+    if threaded:
+        threads = {}
+
+    for site in sites():
+        for section in sections:
+            if threaded:
+                threads[(site, section)] = Thread(None, worker, args = (site, section))
+            else:
+                worker(thesite, thesection)
+
+    if threaded:
+        for thread in threads.values():
+            thread.start()
+        for thread in threads.values():
+            thread.join()
+
+    while not results.empty():
+        yield results.get()
