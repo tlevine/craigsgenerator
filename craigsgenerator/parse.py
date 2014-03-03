@@ -1,5 +1,5 @@
 from string import capwords
-import dateutil, datetime
+import dateutil.parser, datetime
 
 import lxml.html
 
