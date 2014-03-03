@@ -24,13 +24,7 @@ def search_row(p):
 
     return row
 
-def bump_url(scheme, subdomain, section, `:
-    url = self.next_search_url()
-    if url is None:
-        raise ValueError('No next page for %s' % self.present_search_url)
-    self.present_search_url = url
-
-def next_search_url(scheme, subdomain, section, html = None):
+def next_search_url(scheme, subdomain, section, html):
     'Determine the url of the next search page.'
     if html is None:
         return '%s://%s.craigslist.org/%s/index000.html' % (scheme, subdomain, section)
@@ -43,3 +37,11 @@ def next_search_url(scheme, subdomain, section, html = None):
     else:
         raise ValueError('Unexpected number of next links (%d)' % (len(nexts)))
 
+def load_response(response):
+    '''
+    In:  python-requests Response
+    Out: lxml HTML tree
+    '''
+    html = lxml.html.fromstring(response.text)
+    html.make_links_absolute(response.url)
+    return html

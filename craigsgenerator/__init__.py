@@ -10,29 +10,17 @@ from craigsgenerator.parse import search_row
 
 #logger = Logger('craigsgenerator')
 
-class Section:
-    def __init__(self, subdomain, section, *args, cachedir = 'craigslist', scheme = 'https', **kwargs):
+def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get = requests.get)::
+    try:
         if scheme not in {'http','https'}:
             raise ValueError('Scheme must be one of "http" or "https".')
 
-        self.subdomain = subdomain
-        self.section = section
-        self.cachedir = cachedir
-        self.args = args
-        self.kwargs = kwargs
-        self.scheme = scheme
-
-    def __iter__(self):
-        self.buffer = []
-        self.html = None
-        self.present_search_url = None
-        return self
-
-    def __next__(self):
-        if self.buffer == []:
-            if self.next_search_url() is None:
-            #   logger.debug('Stopped at %s' % self.present_search_url)
-                raise StopIteration
+        buffer = []
+        html = None
+        present_search_url = None
+        while True:
+#           if self.next_search_url() is None:
+#               raise StopIteration
 
             self.bump_url()
             self.download()
@@ -45,11 +33,9 @@ class Section:
                              False, *self.args, **self.kwargs)
         return row
 
-    def download(self):
-        with open(get(self.cachedir, self.present_search_url, True, *self.args, **self.kwargs)) as fp:
-            html = lxml.html.fromstring(fp.read())
-        html.make_links_absolute(self.present_search_url)
-        self.html = html
+    except GeneratorExit:
+        pass
+
 
     def skip_downloaded(self):
         'Skip the things that have been downloaded; start iterating at things that have not been downloaded.'
