@@ -9,11 +9,21 @@ from pickle_warehouse import Warehouse
 import craigsgenerator.download as download
 import craigsgenerator.parse as parse
 
-def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get = requests.get, date_func = datetime.date):
+def listings(root, section, cachedir = 'craigslist', scheme = 'https', get = requests.get, date_func = datetime.date):
+    '''
+    Generate listings.
+
+    In:
+        root: Something like "austin.craigslist.org"
+        section: Something like "sub"
+    Yields:
+        dicts of listing information
+    '''
     try:
         results = []
         html = None
         warehouse = Warehouse(cachedir)
+
         while True:
             for result in results:
                 href = result.get('href')
@@ -32,6 +42,7 @@ def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get =
             results.extend(parse.search(html))
             if results == []:
                 break
+
     except GeneratorExit:
         pass
 
