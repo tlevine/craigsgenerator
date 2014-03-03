@@ -68,3 +68,6 @@ def sites(get = requests.get, url = 'https://sfbay.craigslist.org', cachedir = '
         elif p.netloc not in results:
             results.add(p.netloc)
             yield p.netloc
+
+def sections():
+    pass
