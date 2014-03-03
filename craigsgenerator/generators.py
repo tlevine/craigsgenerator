@@ -9,7 +9,7 @@ from pickle_warehouse import Warehouse
 import craigsgenerator.download as download
 import craigsgenerator.parse as parse
 
-def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = requests.get, date_func = datetime.date):
+def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = requests.get, date_func = datetime.date, n_threads = 10):
     '''
     Generate listings.
 
@@ -25,18 +25,16 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
         warehouse = Warehouse(cachedir)
 
         while True:
-            for result in results:
-                href = result.get('href')
-                if href is not None:
-                    response = download(get, warehouse, href, date_func()):
-                    html = parse.load_response(response)
-                    # result.update(parse.???(html))
-                    yield result
+            # Listings
+            urls = (result['href'] for result in results)
+            for result, url, html in zip(results, *download.download_many(get, warehouse, urls, date_func, n_threads)):
+                # result.update(parse.???(html))
+                yield result
 
+            # Search
             url = parse.next_search_url(scheme, site, section, html)
             if url is None:
                 break
-
             response = download.download(get, warehouse, url, date_func())
             html = parse.load_response(response)
             results.extend(parse.search(html))

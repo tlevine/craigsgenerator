@@ -30,6 +30,8 @@ def already_downloaded(warehouse, url, date):
     return key in warehouse
 
 def download_many(get, warehouse, urls, date_func, n_threads):
+    '''
+    '''
     threads = {}
     results = Queue()
 
@@ -37,7 +39,7 @@ def download_many(get, warehouse, urls, date_func, n_threads):
         kwargs = {
             'target': threaded_download_worker,
             'name': url,
-            'args': (get, warehouse, url, date_func),
+            'args': (get, warehouse, url, date_func, results),
         }
         threads['url'] = Thread(None, **kwargs)
 
@@ -47,8 +49,8 @@ def download_many(get, warehouse, urls, date_func, n_threads):
     for thread in threads.values():
         thread.join()
 
-    while not queue.empty():
-        yield queue.get()
+    while not results.empty():
+        yield results.get()
 
 def threaded_download_worker(get, warehouse, url, date_func, target):
     '''
@@ -56,4 +58,4 @@ def threaded_download_worker(get, warehouse, url, date_func, target):
     '''
     response = download.download(get, warehouse, url, date_func())
     html = parse.load_response(response)
-    target.put(html)
+    target.put((url, html))
