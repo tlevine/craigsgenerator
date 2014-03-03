@@ -6,11 +6,14 @@ import datetime
 import lxml.html
 from pickle_warehouse import Warehouse
 
-from craigsgenerator.parse import search_row
+import craigsgenerator.download as download
+import craigsgenerator.parse as parse
 
 #logger = Logger('craigsgenerator')
 
-def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get = requests.get):
+def listing(url, cachedir = 'listings', scheme = 'https', get = requests.get):
+
+def section(subdomain, section, cachedir = 'sections', scheme = 'https', get = requests.get):
     try:
         if scheme not in {'http','https'}:
             raise ValueError('Scheme must be one of "http" or "https".')
@@ -19,10 +22,10 @@ def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get =
         html = None
         present_search_url = None
         while True:
-            if next_search_url(scheme, subdomain, section, html) is None:
+            if parse.next_search_url(scheme, subdomain, section, html) is None:
                 raise StopIteration
 
-            self.bump_url()
+            if bump_url()
             self.download()
             self.buffer.extend(map(search_row,self.html.xpath('//p[@class="row"]')))
             if self.buffer == []:

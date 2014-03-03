@@ -1,4 +1,6 @@
-def download(get, warehouse, url, date):
+from urllib.parse import urlsplit
+
+def _cache(get, warehouse, url, date):
     '''
     In:
         get: function that takes a url and returns a python-requests Response
@@ -8,6 +10,9 @@ def download(get, warehouse, url, date):
     Out:
         A python-requests Response
     '''
+    if urlsplit(url).scheme not in {'http','https'}:
+        raise ValueError('Scheme must be one of "http" or "https".')
+
     key = (url, d.strftime('%Y/%W'))
     if key in warehouse:
         r = warehouse[key]
