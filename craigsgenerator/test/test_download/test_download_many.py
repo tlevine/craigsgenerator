@@ -13,5 +13,5 @@ def test_download_many():
     warehouse = {}
     urls = ['http://foo', 'https://bar', 'http://example.com']
     observed = set(download_many(fake_get, warehouse, urls, lambda: utils.fake_date, 4, worker = fake_worker))
-    expected = set(FakeResponse(url, 'blah') for url in urls)
+    expected = set(utils.FakeResponse(url, 'blah') for url in urls)
     n.assert_set_equal(observed, expected)
