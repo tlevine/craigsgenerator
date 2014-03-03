@@ -42,8 +42,9 @@ def check_listing(fn, expected):
 
 listing_testcases = [
     ('4212230639.html', {
-        'posted':  datetime.datetime(2013, 11, 25,  0, 52, 38) + datetime.timedelta(hours = 5)},
-        'updated': datetime.datetime(2013, 12,  1, 21, 47, 39) + datetime.timedelta(hours = 5)),
+        'posted':  datetime.datetime(2013, 11, 25,  0, 52, 38) + datetime.timedelta(hours = 5),
+        'updated': datetime.datetime(2013, 12,  1, 21, 47, 39) + datetime.timedelta(hours = 5)
+    }),
 ]
 
 def test_listing():
