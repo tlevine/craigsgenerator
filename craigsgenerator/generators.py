@@ -2,6 +2,8 @@ import re
 import os
 import urllib.parse
 import datetime
+from email.utils import parsedate
+from time import mktime
 
 import lxml.html
 from pickle_warehouse import Warehouse
@@ -29,6 +31,7 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
             urls = (result['href'] for result in results)
             for result, url, response in zip(results, *download.download_many(get, warehouse, urls, date_func, n_threads)):
                 result['html'] = response.text
+                result['downloaded'] = mktime(parsedate(response.date))
                 yield result
 
             # Search
