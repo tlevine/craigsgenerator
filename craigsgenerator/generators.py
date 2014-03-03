@@ -69,5 +69,5 @@ def sites(get = requests.get, url = 'https://sfbay.craigslist.org', cachedir = '
             results.add(p.netloc)
             yield p.netloc
 
-def sections():
-    pass
+def sections(**kwargs):
+    return []

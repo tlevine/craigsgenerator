@@ -1,7 +1,6 @@
 import requests
 from queue import Queue
-from craigsgenerator.generators import listings
-from craigsgenerator.generators import sites
+from craigsgenerator.generators import sites, sections, listings
 
 def craigsgenerator(cachedir = 'craigslist', scheme = 'https', get = requests.get,
         date_func = datetime.date, threads_per_section = 10, superthreaded = True):
