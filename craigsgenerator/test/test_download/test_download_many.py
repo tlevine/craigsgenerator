@@ -1,19 +1,17 @@
 import nose.tools as n
 
 from craigsgenerator.download import download_many
+import craigsgenerator.test.test_download.utils as utils
 
-def fake_get(url):
-    return FakeResponse('lalala')
+def fake_get(_):
+    raise AssertionError('This should not run.')
 
-fake_warehouse = {('http://foo.bar','2014/08'): FakeResponse('baz')}
-fake_date = datetime.date(2014,3,1)
+def fake_worker(get, warehouse, url, date_func, target):
+    target.put(utils.FakeResponse(url, 'blah'))
 
-def test_cached(get, warehouse, urls, date_func, n_threads):
-
-def test_bad_scheme():
-    with n.assert_raises(ValueError):
-        r = download(fake_get, fake_warehouse, 'ftp://example.com', fake_date)
-
-def test_cached():
-    r = download(fake_get, fake_warehouse, 'http://foo.bar', fake_date)
-
+def test_download_many():
+    warehouse = {}
+    urls = ['http://foo', 'https://bar', 'http://example.com']
+    observed = set(download_many(fake_get, warehouse, urls, lambda: utils.fake_date, 4, worker = fake_worker))
+    expected = set(FakeResponse(url, 'blah') for url in urls)
+    n.assert_set_equal(observed, expected)
