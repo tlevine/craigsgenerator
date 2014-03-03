@@ -1,13 +1,16 @@
+from queue import Queue
+
 import nose.tools as n
 
-from craigsgenerator.download import download
+from craigsgenerator.download import threaded_download_worker
 import craigsgenerator.test.test_download.utils as utils
 
 
-    def threaded_download_worker(utils.fake_get, warehouse, url, date_func, target):
-        '''
-        Send HTML elements to the target queue.
-        '''
-        response = download(get, warehouse, url, date_func())
-        target.put((url, response))
-
+def test():
+    warehouse = {'http://blah': 'zombies'}
+    queue = Queue()
+    threaded_download_worker(utils.fake_get_should_not_run,
+            warehouse, 'http://blah', utils.fake_date_func, queue)
+    n.assert_false(queue.empty())
+    n.assert_equal(queue.get(), 'zombies')
+    n.assert_true(queue.empty())

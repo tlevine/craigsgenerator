@@ -11,3 +11,6 @@ def fake_get_should_not_run(_):
 
 fake_warehouse = {('http://foo.bar','2014/08'): FakeResponse('http://thomaslevine.com', 'baz')}
 fake_date = datetime.date(2014,3,1)
+
+def fake_date_func():
+    return fake_date
