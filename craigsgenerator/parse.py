@@ -1,3 +1,6 @@
+from string import capwords
+import dateutil, datetime
+
 import lxml.html
 
 SEARCH_ROW_ATTRS = [
@@ -21,6 +24,14 @@ def listing(response):
     response ->  [HTML element]
     '''
     html = load_response(response)
+
+    def humandate(text):
+        ds = html.xpath('//p[contains(text(),"%s") or contains(text(),"%s")]/time/@datetime' % (capwords(text), text.lower()))
+        if ds != []:
+            e = dateutil.parser.parse(ds[0])
+            return datetime.datetime.fromtimestamp((datetime.datetime.astimezone(e).timestamp()))
+
+    return {k:humandate(k) for k in ['posted','updated']}
 
 
 def search_row(p):
