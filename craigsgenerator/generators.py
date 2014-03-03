@@ -32,6 +32,7 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
             for result, url, response in zip(results, *download.download_many(get, warehouse, urls, date_func, n_threads)):
                 result['html'] = response.text
                 result['downloaded'] = mktime(parsedate(response.date))
+                result.update(parse.listing(response))
                 yield result
 
             # Search
@@ -39,8 +40,7 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
             if url is None:
                 break
             response = download.download(get, warehouse, url, date_func())
-            html = parse.load_response(response)
-            results.extend(parse.search(html))
+            results.extend(parse.search(response))
             if results == []:
                 break
 

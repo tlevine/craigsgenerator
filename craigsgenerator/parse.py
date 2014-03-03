@@ -7,11 +7,19 @@ SEARCH_ROW_ATTRS = [
     ('price','span[@class="l2"]/span[@class="price"]/text()', lambda x: int(x.strip('$',))),
 ]
 
-def search(html):
+def search(response):
     '''
-    HTML element ->  [HTML element]
+    response ->  [HTML element]
     '''
+    html = load_response(response)
     return map(search_row,html.xpath('//p[@class="row"]'))
+
+def listing(response):
+    '''
+    response ->  [HTML element]
+    '''
+    html = load_response(response)
+
 
 def search_row(p):
     'Parse a <p class="row"></p>.'
