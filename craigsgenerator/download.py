@@ -1,4 +1,7 @@
 from urllib.parse import urlsplit
+from itertools import repeat
+from threading import Thread
+from queue import Queue
 
 def download(get, warehouse, url, date):
     '''
@@ -25,3 +28,32 @@ def already_downloaded(warehouse, url, date):
     'Have I already made a similar enough request?'
     key = (url, d.strftime('%Y/%W'))
     return key in warehouse
+
+def download_many(get, warehouse, urls, date_func, n_threads):
+    threads = {}
+    results = Queue()
+
+    for url in urls:
+        kwargs = {
+            'target': threaded_download_worker,
+            'name': url,
+            'args': (get, warehouse, url, date_func),
+        }
+        threads['url'] = Thread(None, **kwargs)
+
+    for thread in threads.values():
+        thread.start()
+
+    for thread in threads.values():
+        thread.join()
+
+    while not queue.empty():
+        yield queue.get()
+
+def threaded_download_worker(get, warehouse, url, date_func, target):
+    '''
+    Send HTML elements to the target queue.
+    '''
+    response = download.download(get, warehouse, url, date_func())
+    html = parse.load_response(response)
+    target.put(html)
