@@ -25,9 +25,14 @@ def test_search_row_with_location():
     }
     assert o == e
 
-def test_search():
-    fn = 'austin-sub.html'
+def _read(fn):
     with open(os.path.join('craigsgenerator','test','fixtures',fn)) as fp:
         r = FakeResponse('https://foo.bar/baz', fp.read())
-    observed = parse.search(r)
+    return r
+
+def test_search():
+    observed = parse.search(_read(fn = 'austin-sub.html'))
     n.assert_equal(len(observed), 100)
+
+def check_listing(fn):
+    pass
