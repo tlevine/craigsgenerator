@@ -5,7 +5,7 @@ import datetime
 from email.utils import parsedate
 from time import mktime
 
-import lxml.html
+import requests
 from pickle_warehouse import Warehouse
 
 import craigsgenerator.download as download

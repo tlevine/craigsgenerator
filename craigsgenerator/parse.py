@@ -1,3 +1,5 @@
+import lxml.html
+
 SEARCH_ROW_ATTRS = [
     ('href','a/@href', str),
     ('latitude', '@data-latitude', float),

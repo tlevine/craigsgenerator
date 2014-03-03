@@ -1,5 +1,6 @@
 from queue import Queue
-from craigsgenerator.generators import _listings, _sites
+from craigsgenerator.generators import listings as _listings
+from craigsgenerator.generators import sites as _sites
 
 def craigsgenerator(sites = _sites, listings = _listings, sections = ['sub'], threaded = True):
     results = Queue()
