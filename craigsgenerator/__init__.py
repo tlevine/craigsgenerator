@@ -37,23 +37,22 @@ def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get =
     except GeneratorExit:
         pass
 
-def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar'):
+def subdomains(get = requests.get, url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar', date_func = datetime.date):
+    '''
+    Generate craigslist subdomains.
+    '''
     results = set()
-    with open(get(cachedir, url, False)) as fp:
-        html = lxml.html.fromstring(fp.read())
+    warehouse = Warehouse(cachedir)
+
+    response = parse.download(get, warehouse, url, date_func)
+    html = parse.load_response(response)
 
     for href in html.xpath('id("%s")/descendant::a/@href' % id):
         p = urllib.parse.urlparse(href.rstrip('/'))
         if p.fragment:
             pass
         elif p.path:
-            results.update(subdomains(url = href, cachedir = cachedir, id = 'list'))
-        else:
+            results.update(subdomains(get = requests.get, url = href, cachedir = cachedir, id = 'list', date_func = date_func))
+        elif p.netloc not in results:
             results.add(p.netloc)
-    return results
-
-def bump_url(scheme, subdomain, section, html):
-    url = next_search_url(scheme, subdomain, section, html)
-    if url is None:
-        raise ValueError('No next page')
-    return url
+            yield p.netloc
