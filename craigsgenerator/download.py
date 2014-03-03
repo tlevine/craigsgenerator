@@ -16,7 +16,7 @@ def download(get, warehouse, url, date):
     if urlsplit(url).scheme not in {'http','https'}:
         raise ValueError('Scheme must be one of "http" or "https".')
 
-    key = (url, d.strftime('%Y/%W'))
+    key = (url, date.strftime('%Y/%W'))
     if key in warehouse:
         r = warehouse[key]
     else:
@@ -26,7 +26,7 @@ def download(get, warehouse, url, date):
 
 def already_downloaded(warehouse, url, date):
     'Have I already made a similar enough request?'
-    key = (url, d.strftime('%Y/%W'))
+    key = (url, date.strftime('%Y/%W'))
     return key in warehouse
 
 def download_many(get, warehouse, urls, date_func, n_threads):
