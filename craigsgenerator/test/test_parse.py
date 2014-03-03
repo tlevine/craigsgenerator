@@ -10,7 +10,7 @@ p = lxml.html.fromstring('''
 ''')
 p.make_links_absolute('https://austin.craigslist.org/sub/index200.html')
 
-FakeResponse = namedtuple('Response', ['text'])
+FakeResponse = namedtuple('Response', ['url', 'text'])
 
 def test_search_row_with_location():
     o = parse.search_row(p)
@@ -28,5 +28,5 @@ def test_search():
     fn = 'austin-sub.html'
     with open(os.path.join('craigsgenerator','test','fixtures',fn)) as fp:
         r = FakeResponse(fp.read())
-    observed = parse.search(r)
+    observed = parse.search('https://foo.bar/baz', r)
     n.assert_equal(len(observed), 3)
