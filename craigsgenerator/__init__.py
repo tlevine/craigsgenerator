@@ -1,24 +1,36 @@
 import requests
 from queue import Queue
-from craigsgenerator.generators import listings as _listings
-from craigsgenerator.generators import sites as _sites
+from craigsgenerator.generators import listings
+from craigsgenerator.generators import sites
 
 def craigsgenerator(cachedir = 'craigslist', scheme = 'https', get = requests.get,
-                    date_func = datetime.date, threads_per_section = 10, superthreaded = True,
-                    sites = _sites, listings = _listings, sections = lambda: ['sub']):
+        date_func = datetime.date, threads_per_section = 10, superthreaded = True):
     '''
+    In:
+        cachedir: Where should downloads (pickled Response objects) be stored?
+        scheme: "https" or "http"
+        get: a function that takes a url and returns a Response object
+        date_func: a function that returns a datetime.date
+        threads_per_section: How many threads to run within each particular craigslist section, by site
+        superthreaded: Whether to run each craigslist site in a different thread
+    Out:
+        A generator of dictionaries
     '''
+    kwargs = {
+        'cachedir': cachedir, 'scheme': scheme,
+        'get': get, 'date_func': date_func,
+    }
 
     results = Queue()
     def worker(thesite, thesection):
-        for listing in thelistings(thesite, thesection):
+        for listing in thelistings(thesite, thesection, n_threads = threads_per_section, **kwargs):
             results.put(listing)
 
     if superthreaded:
         threads = {}
 
-    for site in sites():
-        for section in sections:
+    for site in sites(**kwargs):
+        for section in sections(**kwargs):
             if superthreaded:
                 threads[(site, section)] = Thread(None, worker, args = (site, section))
             else:
