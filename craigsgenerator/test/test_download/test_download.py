@@ -16,3 +16,7 @@ fake_date = datetime.date(2014,3,1)
 def test_bad_scheme():
     with n.assert_raises(ValueError):
         r = download(fake_get, fake_warehouse, 'ftp://example.com', fake_date)
+
+def test_cached():
+    r = download(fake_get, fake_warehouse, 'http://foo.bar', fake_date)
+    n.assert_equal(r.text, 'lalala')
