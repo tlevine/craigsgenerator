@@ -9,7 +9,7 @@ setup(name='craigsgenerator',
         'Intended Audience :: Developers',
     ],
     packages=['craigsgenerator'],
-    install_requires = ['requests','lxml'],
+    install_requires = ['requests','lxml','python-dateutil'],
     tests_require = ['nose'],
     version='0.1.0',
     license='AGPL'
