@@ -44,7 +44,7 @@ def download_many(get, warehouse, urls, date_func, n_threads, worker = threaded_
 
     for url in urls:
         kwargs = {
-            'target': threaded_download_worker,
+            'target': worker,
             'name': url,
             'args': (get, warehouse, url, date_func, results),
         }
