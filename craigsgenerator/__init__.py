@@ -10,7 +10,7 @@ from craigsgenerator.parse import search_row
 
 #logger = Logger('craigsgenerator')
 
-def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get = requests.get)::
+def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get = requests.get):
     try:
         if scheme not in {'http','https'}:
             raise ValueError('Scheme must be one of "http" or "https".')
@@ -19,8 +19,8 @@ def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get =
         html = None
         present_search_url = None
         while True:
-#           if self.next_search_url() is None:
-#               raise StopIteration
+            if next_search_url(scheme, subdomain, section, html) is None:
+                raise StopIteration
 
             self.bump_url()
             self.download()
@@ -36,21 +36,6 @@ def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get =
     except GeneratorExit:
         pass
 
-
-    def skip_downloaded(self):
-        'Skip the things that have been downloaded; start iterating at things that have not been downloaded.'
-        today = datetime.date.today()
-        yesterday = datetime.date.today()
-
-        sectiondir = os.path.join(self.cachedir, self.subdomain + '.craigslist.org', self.section)
-        for index in sorted(filter(lambda x: x.startswith('index'), filter(os.path.isdir, os.listdir(sectiondir)))):
-            url = os.path.join(sectiondir, index)
-            if os.path.exists(os.path.join(url, today)) or os.path.exists(os.path.join(url, yesterday)):
-                self.present_search_url = '%s://%s.craigslist.org/%s/%s' % (self.scheme, self.subdomain, self.section, index)
-            else:
-                break
-        if self.present_search_url is not None:
-            self.download()
 
 def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar'):
     results = set()
