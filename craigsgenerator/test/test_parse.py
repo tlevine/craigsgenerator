@@ -34,5 +34,17 @@ def test_search():
     observed = parse.search(_read(fn = 'austin-sub.html'))
     n.assert_equal(len(observed), 100)
 
-def check_listing(fn):
-    pass
+def check_listing(fn, expected):
+    r = _read(fn)
+    observed = parse.listing(r)
+    n.assert_dict_equal(observed, expected)
+
+listing_testcases = [
+    '', {},
+    '', {},
+    '', {},
+]
+
+def test_listing():
+    for fn, expected in listing_testcases:
+        yield check_listing, fn, expected
