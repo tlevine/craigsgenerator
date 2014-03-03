@@ -45,7 +45,7 @@ def craigsgenerator(cachedir = 'craigslist', scheme = 'https', get = requests.ge
 
         while True:
             try:
-                yield results.get()
+                yield results.get_nowait()
             except Empty:
                 if set(thread.is_alive() for thread in threads.values()) == {False}:
                     break
