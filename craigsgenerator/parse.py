@@ -23,10 +23,19 @@ def search_row(p):
 
     return row
 
-def next_search_url(scheme, subdomain, section, html):
-    'Determine the url of the next search page.'
+def next_search_url(scheme, root, section, html):
+    '''
+    Determine the url of the next search page.
+    In:
+        scheme: "http" or "https"
+        root: something like "boston.craigslist.org"
+        section: a section in craigslist ("sub", "jsy/sub", &c.)
+        html: lxml HTML element for the current page
+    Out:
+        A url
+    '''
     if html is None:
-        return '%s://%s.craigslist.org/%s/index000.html' % (scheme, subdomain, section)
+        return '%s://%s/%s/index000.html' % (scheme, root, section)
 
     nexts = set(html.xpath('//a[contains(text(),"next >")]/@href'))
     if len(nexts) == 0:

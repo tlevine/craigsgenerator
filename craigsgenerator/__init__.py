@@ -9,8 +9,6 @@ from pickle_warehouse import Warehouse
 import craigsgenerator.download as download
 import craigsgenerator.parse as parse
 
-#logger = Logger('craigsgenerator')
-
 def section(subdomain, section, cachedir = 'craigslist', scheme = 'https', get = requests.get, date_func = datetime.date):
     try:
         results = []
