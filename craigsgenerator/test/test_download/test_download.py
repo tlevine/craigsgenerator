@@ -25,4 +25,4 @@ def test_not_cached():
     d = {}
     r = download(fake_get, d, 'http://foo.bar', fake_date)
     n.assert_equal(r.text, 'lalala')
-    n.assert_dict_equal(d, {('http://foo.bar', '2014/09'): FakeResponse})
+    n.assert_dict_equal(d, {('http://foo.bar', '2014/08'): FakeResponse('lalala')})
