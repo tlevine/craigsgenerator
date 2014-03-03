@@ -40,9 +40,9 @@ def check_listing(fn, expected):
     n.assert_dict_equal(observed, expected)
 
 listing_testcases = [
-    '', {},
-    '', {},
-    '', {},
+    ('', {}),
+    ('', {}),
+    ('', {}),
 ]
 
 def test_listing():
