@@ -27,8 +27,8 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
         while True:
             # Listings
             urls = (result['href'] for result in results)
-            for result, url, html in zip(results, *download.download_many(get, warehouse, urls, date_func, n_threads)):
-                # result.update(parse.???(html))
+            for result, url, response in zip(results, *download.download_many(get, warehouse, urls, date_func, n_threads)):
+                result['html'] = response.text
                 yield result
 
             # Search
