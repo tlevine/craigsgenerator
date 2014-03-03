@@ -1,13 +1,18 @@
 from time import sleep
 import requests
 from queue import Queue, Empty
-from craigsgenerator.generators import sites, sections, listings
+import craigsgenerator.generators as g
 
-def craigsgenerator(cachedir = 'craigslist', scheme = 'https', get = requests.get,
-        date_func = datetime.date, threads_per_section = 10, superthreaded = True,
-        sleep_interval = 60):
+def craigsgenerator(sites = None, sections = None,
+                    cachedir = 'craigslist', scheme = 'https', get = requests.get,
+                    date_func = datetime.date, threads_per_section = 10,
+                    superthreaded = True, sleep_interval = 60):
     '''
-    In:
+    These parameters limit what pages will be downloaded; if you use the defaults, all pages will be downloaded.
+        sites: An iterable of Craigslist sites to download (like "boston.craigslist.org")
+        sections: An iterable of Craigslist sites to download (like "roo" or "sub")
+
+    The rest of the paramaters relate to the manner of download.
         cachedir (str): Where should downloads (pickled Response objects) be stored?
         scheme (str): "https" or "http"
         get: a function that takes a url and returns a Response object
@@ -15,7 +20,8 @@ def craigsgenerator(cachedir = 'craigslist', scheme = 'https', get = requests.ge
         threads_per_section (int): How many threads to run within each particular craigslist section, by site
         superthreaded (bool): Whether to run each craigslist site in a different thread
         sleep_interval (int): How long to sleep when waiting for results
-    Out:
+
+    Output:
         A generator of dictionaries
     '''
     try:
@@ -23,6 +29,11 @@ def craigsgenerator(cachedir = 'craigslist', scheme = 'https', get = requests.ge
             'cachedir': cachedir, 'scheme': scheme,
             'get': get, 'date_func': date_func,
         }
+
+        if sites is None:
+            sites = g.sites(**kwargs)
+        if sections is None:
+            sections = g.sections(**kwargs)
 
         results = Queue()
         def worker(thesite, thesection):
@@ -32,8 +43,8 @@ def craigsgenerator(cachedir = 'craigslist', scheme = 'https', get = requests.ge
         if superthreaded:
             threads = {}
 
-        for site in sites(**kwargs):
-            for section in sections(**kwargs):
+        for site in site:
+            for section in sections:
                 if superthreaded:
                     threads[(site, section)] = Thread(None, worker, args = (site, section))
                 else:
