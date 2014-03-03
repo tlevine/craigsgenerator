@@ -1,6 +1,7 @@
 import os
 from collections import namedtuple
 
+import nose.tools as n
 import lxml.html
 
 import craigsgenerator.parse as parse
@@ -27,6 +28,6 @@ def test_search_row_with_location():
 def test_search():
     fn = 'austin-sub.html'
     with open(os.path.join('craigsgenerator','test','fixtures',fn)) as fp:
-        r = FakeResponse(fp.read())
-    observed = parse.search('https://foo.bar/baz', r)
-    n.assert_equal(len(observed), 3)
+        r = FakeResponse('https://foo.bar/baz', fp.read())
+    observed = parse.search(r)
+    n.assert_equal(len(observed), 100)

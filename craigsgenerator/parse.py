@@ -14,7 +14,7 @@ def search(response):
     response ->  [HTML element]
     '''
     html = load_response(response)
-    return map(search_row,html.xpath('//p[@class="row"]'))
+    return list(map(search_row,html.xpath('//p[@class="row"]')))
 
 def listing(response):
     '''
