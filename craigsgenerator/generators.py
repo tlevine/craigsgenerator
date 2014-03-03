@@ -61,7 +61,9 @@ def sites(get = requests.get, url = 'https://sfbay.craigslist.org', cachedir = '
         if p.fragment:
             pass
         elif p.path:
-            results.update(sites(get = requests.get, url = href, cachedir = cachedir, id = 'list', date_func = date_func))
+            for netloc in sites(get = requests.get, url = href, cachedir = cachedir, id = 'list', date_func = date_func):
+                results.add(netloc)
+                yield netloc
         elif p.netloc not in results:
             results.add(p.netloc)
             yield p.netloc
