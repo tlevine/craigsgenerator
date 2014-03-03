@@ -1,12 +1,11 @@
 import re
 import os
 import urllib.parse
-#from logging import Logger
 import datetime
 
 import lxml.html
+from pickle_warehouse import Warehouse
 
-from craigsgenerator.cache import get
 from craigsgenerator.parse import search_row
 
 #logger = Logger('craigsgenerator')
@@ -46,12 +45,6 @@ class Section:
                              False, *self.args, **self.kwargs)
         return row
 
-    def bump_url(self):
-        url = self.next_search_url()
-        if url is None:
-            raise ValueError('No next page for %s' % self.present_search_url)
-        self.present_search_url = url
-
     def download(self):
         with open(get(self.cachedir, self.present_search_url, True, *self.args, **self.kwargs)) as fp:
             html = lxml.html.fromstring(fp.read())
@@ -73,19 +66,6 @@ class Section:
         if self.present_search_url is not None:
             self.download()
 
-    def next_search_url(self):
-        'Determine the url of the next search page.'
-        if self.html is None:
-            return '%s://%s.craigslist.org/%s/index000.html' % (self.scheme, self.subdomain, self.section)
-
-        nexts = set(self.html.xpath('//a[contains(text(),"next >")]/@href'))
-        if len(nexts) == 0:
-            return None
-        elif len(nexts) == 1:
-            return str(list(nexts)[0])
-        else:
-            raise ValueError('Unexpected number of next links (%d) at %s' % (len(nexts), self.present_search_url))
-
 def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar'):
     results = set()
     with open(get(cachedir, url, False)) as fp:
@@ -101,8 +81,8 @@ def subdomains(url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id
             results.add(p.netloc)
     return results
 
-def tohtml(row):
-    'Given a row from the Section generator, produce the full text of the listing.'
-    with open(row['listing']) as fp:
-        html = lxml.html.fromstring(fp.read())
-    return html
+def bump_url(scheme, subdomain, section, html):
+    url = next_search_url(scheme, subdomain, section, html)
+    if url is None:
+        raise ValueError('No next page')
+    return url
