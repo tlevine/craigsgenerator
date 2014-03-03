@@ -47,6 +47,7 @@ listing_testcases = [
     }),
     ('4223403463.html', {
         'posted': datetime.datetime(2013, 12, 1, 18, 16, 46) + datetime.timedelta(hours = 5),
+        'updated': None
     }),
 ]
 
