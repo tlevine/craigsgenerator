@@ -2,6 +2,6 @@
 README
 setup.py
 craigsgenerator/__init__.py
-craigsgenerator/cache.py
+craigsgenerator/download.py
+craigsgenerator/generators.py
 craigsgenerator/parse.py
-test/test_parse.py

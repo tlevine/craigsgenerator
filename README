@@ -8,17 +8,8 @@ Generate listings.
 
 .. code-block:: python
 
-    from craigsgenerator import Section
-    for listing in Section('austin','sub'):
-        print(listing)
-
-Additional arguments get passed to :code:`requests.get`.
-
-.. code-block:: python
-
-    from craigsgenerator import Section
-    proxies = {'https':'example.com'}
-    for listing in Section('austin','sub', proxies = proxies):
+    from craigsgenerator import craigsgenerator
+    for listing in craigsgenerator(sites = ['austin.craigslist.org'],sections=['sub']):
         print(listing)
 
 Downloaded files are cached by default and refreshed
@@ -30,20 +21,3 @@ specifying the :code:`cachedir`.
     from craigsgenerator import Section
     for listing in Section('austin','sub', cachedir = 'downloads'):
         print(listing)
-
-Disable caching by setting the :code:`cachedir` to :code:`None`.
-
-.. code-block:: python
-
-    from craigsgenerator import Section, fulltext
-    for listing in Section('austin','sub', cachedir = None):
-        print(listing)
-
-Get the full text of the listing with the :code:`fulltext` function.
-
-.. code-block:: python
-
-    from craigsgenerator import Section
-    for listing in Section('austin','sub'):
-        print(listing)
-        print(fulltext(listing))

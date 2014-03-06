@@ -11,6 +11,6 @@ setup(name='craigsgenerator',
     packages=['craigsgenerator'],
     install_requires = ['requests','lxml','python-dateutil'],
     tests_require = ['nose'],
-    version='0.1.0',
+    version='0.1.1',
     license='AGPL'
 )
