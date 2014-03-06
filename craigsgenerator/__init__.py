@@ -36,6 +36,8 @@ def craigsgenerator(sites = None, sections = None,
         }
 
         if sites is None:
+            kwargs_sites = dict(kwargs)
+            del(kwargs_sites['scheme'])
             sites = g.sites(**kwargs)
         if sections is None:
             sections = g.sections(**kwargs)
