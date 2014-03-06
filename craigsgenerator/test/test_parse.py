@@ -55,3 +55,9 @@ def test_listing():
     'The listing parser should return a dict  with posted and updated datetimes, in UTC.'
     for fn, expected in listing_testcases:
         yield check_listing, fn, expected
+
+def test_next_search_url():
+    html = lxml.html.fromstring(_read(fn = 'austin-sub.html'))
+    observed = next_search_url('https', 'austin.craigslist.org', 'sub', html)
+    expected = 'https://austin.craigslist.org/sub/index100.html'
+    n.assert_equal(observed, expected)
