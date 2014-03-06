@@ -40,7 +40,7 @@ def threaded_download_worker(get, warehouse, url, date_func, target):
     Send HTML elements to the target queue.
     '''
     response = download(get, warehouse, url, date_func())
-    target.put((url, response))
+    target.put(response)
 
 def download_many(get, warehouse, urls, date_func, n_threads, worker = threaded_download_worker):
     '''
