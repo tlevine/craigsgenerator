@@ -13,7 +13,7 @@ import craigsgenerator.download as download
 import craigsgenerator.parse as parse
 
 def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = requests.get,
-             datetime_func = datetime.date.now, date_func = datetime.date.today, n_threads = 10):
+             datetime_func = datetime.datetime.now, date_func = datetime.date.today, n_threads = 10):
     '''
     Generate listings.
 
