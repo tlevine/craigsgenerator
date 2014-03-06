@@ -1,6 +1,9 @@
 import re
 import os
-import urllib.parse
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urllib2 import urlparse
 import datetime
 from email.utils import parsedate
 from time import mktime
@@ -58,7 +61,7 @@ def sites(get = requests.get, url = 'https://sfbay.craigslist.org', cachedir = '
     html = parse.load_response(response)
 
     for href in html.xpath('id("%s")/descendant::a/@href' % id):
-        p = urllib.parse.urlparse(href.rstrip('/'))
+        p = urlparse(href.rstrip('/'))
         if p.fragment:
             pass
         elif p.path:

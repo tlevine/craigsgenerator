@@ -1,7 +1,13 @@
-from urllib.parse import urlsplit
+try:
+    from urllib.parse import urlsplit
+except ImportError:
+    from urlparse import urlsplit
 from itertools import repeat
 from threading import Thread
-from queue import Queue
+try:
+    from queue import Queue
+except ImportError:
+    from Queue import Queue
 
 def download(get, warehouse, url, date):
     '''
