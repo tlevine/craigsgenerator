@@ -14,7 +14,7 @@ from pickle_warehouse import Warehouse
 import craigsgenerator.download as download
 import craigsgenerator.parse as parse
 
-def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = requests.get, date_func = datetime.date, n_threads = 10):
+def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = requests.get, date_func = datetime.date.today(), n_threads = 10):
     '''
     Generate listings.
 
@@ -50,7 +50,7 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
     except GeneratorExit:
         pass
 
-def sites(get = requests.get, url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar', date_func = datetime.date):
+def sites(get = requests.get, url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar', date_func = datetime.date.today()):
     '''
     Generate craigslist sites.
     '''

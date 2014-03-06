@@ -10,7 +10,7 @@ import craigsgenerator.generators as g
 
 def craigsgenerator(sites = None, sections = None,
                     cachedir = 'craigslist', scheme = 'https', get = requests.get,
-                    date_func = datetime.date, threads_per_section = 10,
+                    date_func = datetime.date.today, threads_per_section = 10,
                     superthreaded = True, sleep_interval = 60):
     '''
     These parameters limit what pages will be downloaded; if you use the defaults, all pages will be downloaded.
