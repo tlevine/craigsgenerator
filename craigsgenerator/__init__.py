@@ -11,7 +11,7 @@ import craigsgenerator.generators as g
 def craigsgenerator(sites = None, sections = None,
                     cachedir = 'craigslist', scheme = 'https', get = requests.get,
                     date_func = datetime.date.today, threads_per_section = 10,
-                    superthreaded = True, sleep_interval = 60):
+                    superthreaded = True, sleep_interval = 1):
     '''
     These parameters limit what pages will be downloaded; if you use the defaults, all pages will be downloaded.
         sites: An iterable of Craigslist sites to download (like "boston.craigslist.org")
@@ -35,29 +35,28 @@ def craigsgenerator(sites = None, sections = None,
             'get': get, 'date_func': date_func,
         }
 
-        if sites is None:
+        if sites == None:
             kwargs_sites = dict(kwargs)
             del(kwargs_sites['scheme'])
             sites = g.sites(**kwargs)
-        if sections is None:
+        if sections == None:
             sections = g.sections(**kwargs)
 
-        results = Queue()
-        def worker(thesite, thesection):
-            for listing in g.listings(thesite, thesection, n_threads = threads_per_section, **kwargs):
-                results.put(listing)
+        if not superthreaded:
+            for site in sites:
+                for section in sections:
+                    for listing in g.listings(site, section, n_threads = threads_per_section, **kwargs):
+                        yield listing
 
-        if superthreaded:
-            threads = {}
+        else:
+            results = Queue()
+            def worker(thesite, thesection):
+                for listing in g.listings(thesite, thesection, n_threads = threads_per_section, **kwargs):
+                    results.put(listing)
 
-        for site in sites:
-            for section in sections:
-                if superthreaded:
+            for site in sites:
+                for section in sections:
                     threads[(site, section)] = Thread(None, worker, args = (site, section))
-                else:
-                    worker(site, section)
-
-        if superthreaded:
             for thread in threads.values():
                 thread.start()
             while True:
@@ -68,6 +67,8 @@ def craigsgenerator(sites = None, sections = None,
                         break
                     else:
                         sleep(sleep_interval)
+                else:
+                    results.task_done()
 
     except GeneratorExit:
         pass
