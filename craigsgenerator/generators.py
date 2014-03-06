@@ -5,8 +5,6 @@ try:
 except ImportError:
     from urllib2 import urlparse
 import datetime
-from email.utils import parsedate
-from time import mktime
 
 import requests
 from pickle_warehouse import Warehouse
@@ -14,7 +12,8 @@ from pickle_warehouse import Warehouse
 import craigsgenerator.download as download
 import craigsgenerator.parse as parse
 
-def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = requests.get, date_func = datetime.date.today(), n_threads = 10):
+def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = requests.get,
+             datetime_func = datetime.date.now, date_func = datetime.date.today, n_threads = 10):
     '''
     Generate listings.
 
@@ -35,7 +34,7 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
             for url, response in download.download_many(get, warehouse, urls, date_func, n_threads):
                 result = urls[url]
                 result['html'] = response.text
-                result['downloaded'] = mktime(parsedate(response.date))
+                result['downloaded'] = datetime_func()
                 result.update(parse.listing(response))
                 yield result
 
