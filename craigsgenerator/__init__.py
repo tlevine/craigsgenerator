@@ -1,7 +1,11 @@
 import datetime
 from time import sleep
 import requests
-from queue import Queue, Empty
+try:
+    from queue import Queue, Empty
+except ImportError:
+    from Queue import Queue, Empty
+
 import craigsgenerator.generators as g
 
 def craigsgenerator(sites = None, sections = None,
