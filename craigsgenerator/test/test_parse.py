@@ -59,6 +59,7 @@ def test_listing():
 def test_next_search_url():
     with open(os.path.join('craigsgenerator','test','fixtures','austin-sub.html')) as fp:
         html = lxml.html.fromstring(fp.read())
+    html.make_links_absolute('https://austin.craigslist.org/sub/index000.html')
     observed = parse.next_search_url('https', 'austin.craigslist.org', 'sub', html)
     expected = 'https://austin.craigslist.org/sub/index100.html'
     n.assert_equal(observed, expected)
