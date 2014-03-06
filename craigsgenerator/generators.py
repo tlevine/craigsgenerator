@@ -44,6 +44,7 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
                 del(result['href'])
                 del(result['date'])
                 yield result
+            results = []
 
             # Search
             url = parse.next_search_url(scheme, site, section, html)
