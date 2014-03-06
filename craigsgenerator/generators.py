@@ -6,6 +6,7 @@ except ImportError:
     from urllib2 import urlparse
 import datetime
 
+import lxml.html
 import requests
 from pickle_warehouse import Warehouse
 
@@ -53,6 +54,7 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
                 break
             response = download.download(get, warehouse, url, date_func())
             results = parse.search(response)
+            html = lxml.html.fromstring(response.text)
             if results == []:
                 break
 
