@@ -44,7 +44,7 @@ def craigsgenerator(sites = None, sections = None,
 
         results = Queue()
         def worker(thesite, thesection):
-            for listing in thelistings(thesite, thesection, n_threads = threads_per_section, **kwargs):
+            for listing in g.listings(thesite, thesection, n_threads = threads_per_section, **kwargs):
                 results.put(listing)
 
         if superthreaded:
