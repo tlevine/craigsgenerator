@@ -57,7 +57,8 @@ def test_listing():
         yield check_listing, fn, expected
 
 def test_next_search_url():
-    html = lxml.html.fromstring(_read(fn = 'austin-sub.html'))
+    with open(os.path.join('craigsgenerator','test','fixtures','austin-sub.html')) as fp:
+        html = lxml.html.fromstring(fp.read())
     observed = next_search_url('https', 'austin.craigslist.org', 'sub', html)
     expected = 'https://austin.craigslist.org/sub/index100.html'
     n.assert_equal(observed, expected)
