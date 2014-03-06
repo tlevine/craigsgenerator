@@ -32,7 +32,7 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
         while True:
             # Listings
             urls = (result['href'] for result in results)
-            for result, url, response in zip(results, *download.download_many(get, warehouse, urls, date_func, n_threads)):
+            for result, url, response in zip(results, urls, download.download_many(get, warehouse, urls, date_func, n_threads):
                 result['html'] = response.text
                 result['downloaded'] = mktime(parsedate(response.date))
                 result.update(parse.listing(response))
