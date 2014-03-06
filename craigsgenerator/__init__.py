@@ -58,15 +58,14 @@ def craigsgenerator(sites = None, sections = None,
         if superthreaded:
             for thread in threads.values():
                 thread.start()
-
-        while True:
-            try:
-                yield results.get_nowait()
-            except Empty:
-                if set(thread.is_alive() for thread in threads.values()) == {False}:
-                    break
-                else:
-                    sleep(sleep_interval)
+            while True:
+                try:
+                    yield results.get_nowait()
+                except Empty:
+                    if set(thread.is_alive() for thread in threads.values()) == {False}:
+                        break
+                    else:
+                        sleep(sleep_interval)
 
     except GeneratorExit:
         pass
