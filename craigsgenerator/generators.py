@@ -33,9 +33,16 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
             urls = {result['href']:result for result in results}
             for response in download.download_many(get, warehouse, urls, date_func, n_threads):
                 result = urls[response.url]
+                result.update(parse.listing(response))
+
                 result['html'] = response.text
                 result['downloaded'] = datetime_func()
-                result.update(parse.listing(response))
+                result['url'] = result['href']
+                result['site'] = site
+                result['section'] = section
+
+                del(result['href'])
+                del(result['date'])
                 yield result
 
             # Search
