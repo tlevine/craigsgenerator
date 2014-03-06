@@ -55,7 +55,7 @@ def craigsgenerator(sites = None, sections = None,
                 if superthreaded:
                     threads[(site, section)] = Thread(None, worker, args = (site, section))
                 else:
-                    worker(thesite, thesection)
+                    worker(site, section)
 
         if superthreaded:
             for thread in threads.values():
