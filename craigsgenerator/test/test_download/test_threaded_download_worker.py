@@ -17,5 +17,5 @@ def test():
     threaded_download_worker(utils.fake_get_should_not_run,
             warehouse, url, utils.fake_date_func, queue)
     n.assert_false(queue.empty())
-    n.assert_equal(queue.get(), (url, content))
+    n.assert_equal(queue.get(), content)
     n.assert_true(queue.empty())
