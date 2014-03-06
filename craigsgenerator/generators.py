@@ -49,12 +49,12 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
 
             # Search
             url = parse.next_search_url(scheme, site, section, html)
-            print(url)
             if url == None:
                 break
             response = download.download(get, warehouse, url, date_func())
             results = parse.search(response)
             html = lxml.html.fromstring(response.text)
+            html.make_links_absolute(url)
             if results == []:
                 break
 
