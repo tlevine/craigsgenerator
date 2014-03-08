@@ -34,11 +34,12 @@ def test_listings():
     parse_listing = lambda _: {}
     parse_search = lambda _: [{'href':None,'date' :None}]
 
-    def parse_next_search_url(scheme, site, section, html, searched_urls = 0):
+    searched = set()
+    def parse_next_search_url(scheme, site, section, html):
         if html == None:
-            searched_urls *= 0
-        url = '%s://%s/%s/index%03d.html' % (scheme, site, section, searched_urls)
-        searched_urls += 1
+            searched.clear()
+        url = '%s://%s/%s/index%03d.html' % (scheme, site, section, len(searched))
+        searched.add(url)
         return url
 
     l = listings(scheme, get, n_threads, warehouse, site, section,
