@@ -5,5 +5,5 @@ from craigsgenerator.craigsgenerator import craigsgenerator
 def test_craigsgenerator():
     cg = craigsgenerator(sites = ['foo'], sections = ['bar'], listings = lambda: ['baz'])
     n.assert_equal(next(cg), 'baz')
-    n.assert_raises(StopIteration):
+    with n.assert_raises(StopIteration):
         next(cg)

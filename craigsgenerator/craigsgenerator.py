@@ -65,7 +65,7 @@ def craigsgenerator(sites = None, sections = None, listings = _listings,
             def worker(thesite, thesection):
                 for listing in get_listings(site, section):
                     results.put(listing)
-                        yield listing
+                    yield listing
 
             for site in sites:
                 for section in sections:
