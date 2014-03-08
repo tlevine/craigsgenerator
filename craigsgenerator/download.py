@@ -9,7 +9,7 @@ try:
 except ImportError:
     from Queue import Queue
 
-def download(get, warehouse, url, date):
+def download(warehouse, url, get):
     '''
     In:
         get: function that takes a url and returns a python-requests Response
@@ -22,27 +22,25 @@ def download(get, warehouse, url, date):
     if urlsplit(url).scheme not in {'http','https'}:
         raise ValueError('Scheme must be one of "http" or "https".')
 
-    key = (url, date.strftime('%Y/%W'))
     if key in warehouse:
-        r = warehouse[key]
+        r = warehouse[url]
     else:
         r = get(url)
-        warehouse[key] = r
+        warehouse[url] = r
     return r
 
-def already_downloaded(warehouse, url, date):
+def already_downloaded(warehouse, url):
     'Have I already made a similar enough request?'
-    key = (url, date.strftime('%Y/%W'))
-    return key in warehouse
+    return url in warehouse
 
-def threaded_download_worker(get, warehouse, url, date_func, target):
+def threaded_download_worker(warehouse, url, get, target):
     '''
     Send HTML elements to the target queue.
     '''
-    response = download(get, warehouse, url, date_func())
+    response = download(warehouse, url, get)
     target.put(response)
 
-def download_many(get, warehouse, urls, date_func, n_threads, worker = threaded_download_worker):
+def download_many(warehouse, urls, get, n_threads, worker):
     '''
     '''
     threads = {}
@@ -52,7 +50,7 @@ def download_many(get, warehouse, urls, date_func, n_threads, worker = threaded_
         kwargs = {
             'target': worker,
             'name': url,
-            'args': (get, warehouse, url, date_func, results),
+            'args': (warehouse, url, get, results),
         }
         threads[url] = Thread(None, **kwargs)
 
