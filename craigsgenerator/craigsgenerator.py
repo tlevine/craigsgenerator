@@ -64,15 +64,15 @@ def craigsgenerator(sites = None, sections = None, listings = _listings,
         threads = {}
         results = Queue()
         def worker(thesite, thesection):
-            for listing in get_listings(site, section):
+            for listing in get_listings(thesite, thesection):
                 results.put(listing)
-                yield listing
 
         for site in sites:
             for section in sections:
                 threads[(site, section)] = Thread(None, worker, args = (site, section))
         for thread in threads.values():
             thread.start()
+
         while True:
             try:
                 yield results.get_nowait()
