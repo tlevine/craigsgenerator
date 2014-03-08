@@ -1,7 +1,7 @@
 import datetime
 
 import nose.tools as n
-n.assert_dict_equal.maxDiff = None
+n.assert_dict_equal.__self__.maxDiff = None
 
 import craigsgenerator.test.util as util
 from craigsgenerator.listings import listings, _join
