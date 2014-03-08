@@ -38,7 +38,7 @@ def test_listings():
     def parse_next_search_url(scheme, site, section, html):
         if html == None:
             searched.clear()
-        url = '%s://%s/%s/index%03d.html' % (scheme, site, section, len(searched))
+        url = '%s://%s/%s/index%d00.html' % (scheme, site, section, len(searched))
         searched.add(url)
         return url
 
