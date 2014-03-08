@@ -16,14 +16,14 @@ def search(response):
     '''
     response ->  [HTML element]
     '''
-    html = load_response(response)
-    return list(map(search_row,html.xpath('//p[@class="row"]')))
+    html = _load_response(response)
+    return list(map(_search_row,html.xpath('//p[@class="row"]')))
 
 def listing(response):
     '''
     response ->  [HTML element]
     '''
-    html = load_response(response)
+    html = _load_response(response)
 
     def humandate(text):
         ds = html.xpath('//p[contains(text(),"%s") or contains(text(),"%s")]/time/@datetime' % (capwords(text), text.lower()))
@@ -34,7 +34,7 @@ def listing(response):
     return {k:humandate(k) for k in ['posted','updated']}
 
 
-def search_row(p):
+def _search_row(p):
     'Parse a <p class="row"></p>.'
     row = {}
     for key, attr, func in SEARCH_ROW_ATTRS:
@@ -66,7 +66,7 @@ def next_search_url(scheme, root, section, html):
     else:
         raise ValueError('Unexpected number of next links (%d)' % (len(nexts)))
 
-def load_response(response):
+def _load_response(response):
     '''
     In:  python-requests Response
     Out: lxml HTML tree

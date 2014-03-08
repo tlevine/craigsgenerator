@@ -10,7 +10,7 @@ p = lxml.html.fromstring('''
 p.make_links_absolute('https://austin.craigslist.org/sub/index200.html')
 
 def test_search_row_with_location():
-    o = parse.search_row(p)
+    o = parse._search_row(p)
     e = {
         'href': 'https://austin.craigslist.org/sub/4331364900.html',
         'latitude': 30.289600,
