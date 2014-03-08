@@ -43,6 +43,6 @@ def test_listings():
 
     response = next(l)
     n.assert_equal(response, fake_response('https://chicago.craigslist.org/sub/index100.html'))
-    n.assert_list_equal(gotten, [
+    n.assert_list_equal(gotten, list(map(fake_response, [
         'https://chicago.craigslist.org/sub/index000.html',
-        'https://chicago.craigslist.org/sub/index100.html'])
+        'https://chicago.craigslist.org/sub/index100.html']))
