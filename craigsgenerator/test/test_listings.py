@@ -32,7 +32,7 @@ def test_listings():
     section = 'sub'
 
     parse_listing = lambda _: {}
-    parse_search = lambda _: [{'href':None,'date' :None}]
+    parse_search = lambda response: [{'href':response.url, 'date': None}]
 
     searched = set()
     def parse_next_search_url(scheme, site, section, html):
@@ -48,11 +48,12 @@ def test_listings():
     n.assert_set_equal(gotten, set())
 
     result = next(l)
-#   n.assert_equal(result, fake_result('https://chicago.craigslist.org/sub/index000.html'))
+    (result, fake_result('https://chicago.craigslist.org/sub/index000.html'))
+    n.assert_equal(result, fake_result('https://chicago.craigslist.org/sub/index000.html'))
     n.assert_set_equal(gotten, {'https://chicago.craigslist.org/sub/index000.html'})
 
     response = next(l)
-#   n.assert_equal(response, fake_result('https://chicago.craigslist.org/sub/index100.html'))
+    n.assert_equal(response, fake_result('https://chicago.craigslist.org/sub/index100.html'))
     n.assert_set_equal(gotten, {
         'https://chicago.craigslist.org/sub/index000.html',
         'https://chicago.craigslist.org/sub/index100.html'})
