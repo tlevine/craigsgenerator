@@ -31,7 +31,7 @@ def test_listings():
     site = 'chicago.craigslist.org'
     section = 'sub'
 
-    parse_listing = lambda _: {}
+    parse_listing = lambda response: {'html':response.text,'foo':'bar'}
     parse_search = lambda response: [{'href':response.url, 'date': None}]
 
     searched = set()
@@ -67,7 +67,7 @@ def test_join():
     datetime_func = lambda: fake_datetime
 
     observed = _join(search_row, listing, datetime_func, site, section)
-    expected = { 'url': url, 'site': site, 'section': section,
-        'html': '<html></html>', 'downloaded': datetime_func()}
+    expected = {'url': url, 'site': site, 'section': section, 'foo': 'bar',
+                'html': '<html></html>', 'downloaded': datetime_func()}
     n.assert_dict_equal(search_row, {'href': url, 'date': '3 months ago'}) # should not mutate
     n.assert_dict_equal(observed, expected)
