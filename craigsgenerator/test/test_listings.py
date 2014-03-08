@@ -7,6 +7,14 @@ from craigsgenerator.listings import listings
 
 fake_response = lambda url: util.FakeResponse(url = url, text = '<a href="%s">Look!</a>' % url)
 fake_datetime = datetime.datetime(2014,1,1)
+def fake_result(url):
+    return {
+        'html': fake_response(url).text,
+        'downloaded': fake_datetime,
+        'url': url,
+        'site': 'chicago.craigslist.org',
+        'section': 'sub',
+    }
 
 def fake_download_many(_, urls, __, ___, ____):
     return (fake_response(url) for url in urls)
@@ -38,11 +46,11 @@ def test_listings():
     n.assert_list_equal(gotten, [])
 
     response = next(l)
-    n.assert_equal(response, fake_response('https://chicago.craigslist.org/sub/index000.html'))
+    n.assert_equal(response, fake_result('https://chicago.craigslist.org/sub/index000.html'))
     n.assert_list_equal(gotten, ['https://chicago.craigslist.org/sub/index000.html'])
 
     response = next(l)
-    n.assert_equal(response, fake_response('https://chicago.craigslist.org/sub/index100.html'))
-    n.assert_list_equal(gotten, list(map(fake_response, [
+    n.assert_equal(response, fake_result('https://chicago.craigslist.org/sub/index100.html'))
+    n.assert_list_equal(gotten, list(map(fake_result, [
         'https://chicago.craigslist.org/sub/index000.html',
         'https://chicago.craigslist.org/sub/index100.html'])))
