@@ -31,7 +31,9 @@ def listing(response):
             e = dateutil.parser.parse(ds[0])
             return datetime.datetime.fromtimestamp((datetime.datetime.astimezone(e).timestamp()))
 
-    return {k:humandate(k) for k in ['posted','updated']}
+    result = {k:humandate(k) for k in ['posted','updated']}
+    result['html'] = response.text
+    return result
 
 
 def _search_row(p):
