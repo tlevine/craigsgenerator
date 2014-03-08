@@ -1,4 +1,7 @@
+import nose.tools as n
+
 import craigsgenerator.test.util as util
+from craigsgenerator.listings import listings
 
 fake_response = lambda url: util.FakeResponse(url, '<a href="%s">Look!</a>' % url)
 
