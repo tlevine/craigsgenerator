@@ -12,10 +12,12 @@ def check_listing(fn, expected):
 
 listing_testcases = [
     ('4212230639.html', {
+        'html': util.read('4212230639.html').text,
         'posted':  datetime.datetime(2013, 11, 25,  0, 52, 38) + datetime.timedelta(hours = 5),
         'updated': datetime.datetime(2013, 12,  1, 21, 47, 39) + datetime.timedelta(hours = 5)
     }),
     ('4223403463.html', {
+        'html': util.read('4223403463.html').text,
         'posted': datetime.datetime(2013, 12, 1, 18, 16, 46) + datetime.timedelta(hours = 5),
         'updated': None
     }),
