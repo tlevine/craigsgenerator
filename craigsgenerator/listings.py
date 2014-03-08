@@ -34,7 +34,7 @@ def listings(scheme, get, n_threads, warehouse, site, section,
             urls = {result['href']:result for result in results}
             responses = download_many(warehouse, urls, get, n_threads, download.threaded_download_worker)
             for response in responses:
-                yield join(urls[response.url], response, datetime_func, site, section)
+                yield join(urls[response.url], parse_listing(response), datetime_func, site, section)
             results = []
 
             # Search
@@ -51,11 +51,10 @@ def listings(scheme, get, n_threads, warehouse, site, section,
     except GeneratorExit:
         pass
 
-def join(result, response, datetime_func, site, section):
-    r = dict(result)
-    r.update(parse_listing(response))
+def join(search_dict, listing_dict, datetime_func, site, section):
+    r = dict(search_dict)
+    r.update(listing_dict)
 
-    r['html'] = response.text
     r['downloaded'] = datetime_func()
     r['url'] = r['href']
     r['site'] = site

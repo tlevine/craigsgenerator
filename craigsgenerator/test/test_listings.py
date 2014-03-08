@@ -59,13 +59,13 @@ def test_listings():
 def test_join():
     url = 'http://example.com'
     search_row = {'href': url, 'date': '3 months ago'}
-    response = fake_response(url)
+    listing = {'html':'<html></html>'}
     site = 'chicago.craigslist.org'
     section = 'sub'
     datetime_func = lambda: fake_datetime
 
     observed = join(search_row, listing_response, datetime_func, site, section)
     expected = { 'url': url, 'site': site, 'section': section,
-        'html': response.text, 'downloaded': datetime_func()}
+        'html': '<html></html>', 'downloaded': datetime_func()}
     n.assert_dict_equal(search_row, {'href': url, 'date': '3 months ago'}) # should not mutate
     n.assert_dict_equal(observed, expected)
