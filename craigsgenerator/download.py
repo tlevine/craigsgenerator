@@ -22,7 +22,7 @@ def download(warehouse, url, get):
     if urlsplit(url).scheme not in {'http','https'}:
         raise ValueError('Scheme must be one of "http" or "https".')
 
-    if key in warehouse:
+    if url in warehouse:
         r = warehouse[url]
     else:
         r = get(url)
