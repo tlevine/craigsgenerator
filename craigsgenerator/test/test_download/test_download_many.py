@@ -3,7 +3,7 @@ import nose.tools as n
 from craigsgenerator.download import download_many
 import craigsgenerator.test.test_download.util as util
 
-def fake_worker(warehouse, url, get, target):
+def fake_worker(warehouse, url, get, _, target):
     target.put(util.FakeResponse(url, 'blah'))
 
 def test_download_many():

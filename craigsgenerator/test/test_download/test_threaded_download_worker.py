@@ -14,7 +14,7 @@ content = 'zombies'
 def test():
     warehouse = {url: content}
     queue = Queue()
-    threaded_download_worker(warehouse, url, util.fake_get_should_not_run, queue)
+    threaded_download_worker(warehouse, url, util.fake_get_should_not_run, None, queue)
     n.assert_false(queue.empty())
     n.assert_equal(queue.get(), content)
     n.assert_true(queue.empty())
