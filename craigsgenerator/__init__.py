@@ -1,0 +1,1 @@
+from craigsgenerator.craigsgenerator import craigsgenerator

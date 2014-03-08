@@ -52,7 +52,7 @@ def craigsgenerator(sites = None, sections = None, listings = _listings,
         def get_listings(site, section):
             return listings(scheme, get, threads_per_section, warehouse, site, section,
                             parse.listing, parse.search, parse.next_search_url,
-                            download.download_many, download.threaded_download_worker, datetime.datetime.today):
+                            download.download_many, download.threaded_download_worker, datetime.datetime.today)
 
         if not superthreaded:
             for site in sites:
