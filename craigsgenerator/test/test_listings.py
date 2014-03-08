@@ -72,14 +72,20 @@ def test_join():
     n.assert_dict_equal(search_row, {'href': url, 'date': '3 months ago'}) # should not mutate
     n.assert_dict_equal(observed, expected)
 
+@n.nottest
 def test_cache():
     scheme = 'https'
     gotten = set()
     def get(url):
         raise AssertionError('This should not run.')
     n_threads = 4
-    url = 'https://chicago.craigslist.org/sub/index000.html'
-    warehouse = {(url,2014,4):fake_response(url)}
+
+    search_url = 'https://chicago.craigslist.org/sub/index000.html'
+    listing_url = 'https://chicago.craigslist.org/sub/42832238.html'
+    warehouse = {
+        (search_url,2014,4):fake_response(search_url),
+        listing_url:fake_response(listing_url),
+    }
     site = 'chicago.craigslist.org'
     section = 'sub'
 
