@@ -1,9 +1,15 @@
+import datetime
+
 import nose.tools as n
 
 import craigsgenerator.test.util as util
 from craigsgenerator.listings import listings
 
 fake_response = lambda url: util.FakeResponse(url = url, text = '<a href="%s">Look!</a>' % url)
+fake_datetime = datetime.datetime(2014,1,1)
+
+def fake_download_many(_, urls, __, ___, ____):
+    return (fake_response(url) for url in urls)
 
 def test_listings():
     scheme = 'https'
@@ -27,15 +33,16 @@ def test_listings():
         return url
 
     l = listings(scheme, get, n_threads, warehouse, site, section,
-                 parse_listing, parse_search, parse_next_search_url)
+                 parse_listing, parse_search, parse_next_search_url,
+                 fake_download_many, None, lambda: fake_datetime)
     n.assert_list_equal(gotten, [])
 
     response = next(l)
-    n.assert_equal(response, fake_response('https://chicaho.craigslist.org/sub/index000.html'))
-    n.assert_list_equal(gotten, ['https://chicaho.craigslist.org/sub/index000.html'])
+    n.assert_equal(response, fake_response('https://chicago.craigslist.org/sub/index000.html'))
+    n.assert_list_equal(gotten, ['https://chicago.craigslist.org/sub/index000.html'])
 
     response = next(l)
-    n.assert_equal(response, fake_response('https://chicaho.craigslist.org/sub/index100.html'))
+    n.assert_equal(response, fake_response('https://chicago.craigslist.org/sub/index100.html'))
     n.assert_list_equal(gotten, [
-        'https://chicaho.craigslist.org/sub/index000.html',
-        'https://chicaho.craigslist.org/sub/index100.html'])
+        'https://chicago.craigslist.org/sub/index000.html',
+        'https://chicago.craigslist.org/sub/index100.html'])

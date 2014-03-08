@@ -14,7 +14,9 @@ import craigsgenerator.download as download
 import craigsgenerator.parse as parse
 
 def listings(scheme, get, n_threads, warehouse, site, section,
-             parse_listing, parse_search, parse_next_search_url):
+             parse_listing, parse_search, parse_next_search_url,
+             download_many, threaded_download_worker,
+             datetime_func):
     '''
     Generate listings.
 
@@ -30,7 +32,7 @@ def listings(scheme, get, n_threads, warehouse, site, section,
         while True:
             # Listings
             urls = {result['href']:result for result in results}
-            responses = download.download_many(warehouse, urls, get, n_threads, download.threaded_download_worker)
+            responses = download_many(warehouse, urls, get, n_threads, download.threaded_download_worker)
             for response in responses:
                 result = urls[response.url]
                 result.update(parse_listing(response))
