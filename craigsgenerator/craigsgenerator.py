@@ -6,12 +6,18 @@ try:
 except ImportError:
     from Queue import Queue, Empty
 
-import craigsgenerator.generators as g
+from pickle_warehouse import Warehouse
 
-def craigsgenerator(sites = None, sections = None,
-                    cachedir = 'craigslist', scheme = 'https', get = requests.get,
-                    date_func = datetime.date.today, threads_per_section = 10,
-                    superthreaded = True, sleep_interval = 1):
+import craigsgenerator.download as download
+import craigsgenerator.parse as parse
+from craigsgenerator.listing import listings as _listings
+from craigsgenerator.site import sites as _sites
+from craigsgenerator.section import sections as _sections
+
+def craigsgenerator(sites = None, sections = None, listings = _listings,
+                    cachedir = 'craigslist', scheme = 'https',
+                    get = requests.get,
+                    threads_per_section = 10, superthreaded = True):
     '''
     These parameters limit what pages will be downloaded; if you use the defaults, all pages will be downloaded.
         sites: An iterable of Craigslist sites to download (like "boston.craigslist.org")
@@ -24,11 +30,11 @@ def craigsgenerator(sites = None, sections = None,
         date_func: a function that returns a datetime.date
         threads_per_section (int): How many threads to run within each particular craigslist section, by site
         superthreaded (bool): Whether to run each craigslist site in a different thread
-        sleep_interval (int): How long to sleep when waiting for results
 
     Output:
         A generator of dictionaries
     '''
+    sleep_interval = 1
     try:
         kwargs = {
             'cachedir': cachedir, 'scheme': scheme,
@@ -38,21 +44,28 @@ def craigsgenerator(sites = None, sections = None,
         if sites == None:
             kwargs_sites = dict(kwargs)
             del(kwargs_sites['scheme'])
-            sites = g.sites(**kwargs)
+            sites = _sites(**kwargs)
         if sections == None:
-            sections = g.sections(**kwargs)
+            sections = _sections(**kwargs)
+
+        warehouse = Warehouse(os.path.join(cachedir, 'listings'))
+        def get_listings(site, section):
+            return listings(scheme, get, threads_per_section, warehouse, site, section,
+                            parse.listing, parse.search, parse.next_search_url,
+                            download.download_many, download.threaded_download_worker, datetime.datetime.today):
 
         if not superthreaded:
             for site in sites:
                 for section in sections:
-                    for listing in g.listings(site, section, n_threads = threads_per_section, **kwargs):
+                    for listing in get_listings(site, section):
                         yield listing
 
         else:
             results = Queue()
             def worker(thesite, thesection):
-                for listing in g.listings(thesite, thesection, n_threads = threads_per_section, **kwargs):
+                for listing in get_listings(site, section):
                     results.put(listing)
+                        yield listing
 
             for site in sites:
                 for section in sections:
