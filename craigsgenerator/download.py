@@ -34,15 +34,16 @@ def already_downloaded(warehouse, url):
     'Have I already made a similar enough request?'
     return url in warehouse
 
-def threaded_download_worker(warehouse, url, get, date, target):
+def threaded_download_worker(warehouse, url, get, target):
     '''
     Send HTML elements to the target queue.
     '''
-    response = download(warehouse, url, get, date)
+    response = download(warehouse, url, get, None)
     target.put(response)
 
-def download_many(warehouse, urls, get, date, n_threads, worker):
+def download_many(warehouse, urls, get, n_threads, worker):
     '''
+    Only works for dateless caches
     '''
     threads = {}
     results = Queue()
@@ -51,7 +52,7 @@ def download_many(warehouse, urls, get, date, n_threads, worker):
         kwargs = {
             'target': worker,
             'name': url,
-            'args': (warehouse, url, get, date, results),
+            'args': (warehouse, url, get, results),
         }
         threads[url] = Thread(None, **kwargs)
 
