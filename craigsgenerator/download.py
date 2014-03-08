@@ -9,24 +9,25 @@ try:
 except ImportError:
     from Queue import Queue
 
-def download(warehouse, url, get):
+def download(warehouse, url, get, date):
     '''
     In:
         get: function that takes a url and returns a python-requests Response
         warehouse: a pickle_warehouse.Warehouse
         url: a url str
-        date: a datetime.date
+        date: a date string or None, to be added to the key for caching
     Out:
         A python-requests Response
     '''
     if urlsplit(url).scheme not in {'http','https'}:
         raise ValueError('Scheme must be one of "http" or "https".')
 
-    if url in warehouse:
-        r = warehouse[url]
+    key = url if date == None else (url, date)
+    if key in warehouse:
+        r = warehouse[key]
     else:
         r = get(url)
-        warehouse[url] = r
+        warehouse[key] = r
     return r
 
 def already_downloaded(warehouse, url):
