@@ -1,3 +1,5 @@
+import os
+from threading import Thread
 import datetime
 from time import sleep
 import requests
@@ -10,9 +12,9 @@ from pickle_warehouse import Warehouse
 
 import craigsgenerator.download as download
 import craigsgenerator.parse as parse
-from craigsgenerator.listing import listings as _listings
-from craigsgenerator.site import sites as _sites
-from craigsgenerator.section import sections as _sections
+from craigsgenerator.listings import listings as _listings
+from craigsgenerator.sites import sites as _sites
+from craigsgenerator.sections import sections as _sections
 
 def craigsgenerator(sites = None, sections = None, listings = _listings,
                     cachedir = 'craigslist', scheme = 'https',
@@ -27,7 +29,6 @@ def craigsgenerator(sites = None, sections = None, listings = _listings,
         cachedir (str): Where should downloads (pickled Response objects) be stored?
         scheme (str): "https" or "http"
         get: a function that takes a url and returns a Response object
-        date_func: a function that returns a datetime.date
         threads_per_section (int): How many threads to run within each particular craigslist section, by site
         superthreaded (bool): Whether to run each craigslist site in a different thread
 
@@ -38,7 +39,7 @@ def craigsgenerator(sites = None, sections = None, listings = _listings,
     try:
         kwargs = {
             'cachedir': cachedir, 'scheme': scheme,
-            'get': get, 'date_func': date_func,
+            'get': get,
         }
 
         if sites == None:
@@ -61,6 +62,7 @@ def craigsgenerator(sites = None, sections = None, listings = _listings,
                         yield listing
 
         else:
+            threads = {}
             results = Queue()
             def worker(thesite, thesection):
                 for listing in get_listings(site, section):
