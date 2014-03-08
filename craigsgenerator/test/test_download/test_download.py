@@ -12,8 +12,10 @@ def test_cached():
     n.assert_equal(r.text, 'baz')
 
 def test_cached_with_date():
-    r = download(util.fake_warehouse_with_date, 'http://foo.bar', util.fake_get, '2014-03-01')
+    r = download(util.fake_warehouse_with_date, 'http://foo.bar', util.fake_get_should_not_run, '2014-03-01')
     n.assert_equal(r.text, 'baz')
+    r = download(util.fake_warehouse_with_date, 'http://foo.bar', util.fake_get, '2014-03-02')
+    n.assert_equal(r.text, 'lalala')
 
 def test_not_cached():
     d = {}
