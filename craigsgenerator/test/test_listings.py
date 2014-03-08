@@ -64,7 +64,7 @@ def test_join():
     section = 'sub'
     datetime_func = lambda: fake_datetime
 
-    observed = join(search_row, listing_response, datetime_func, site, section)
+    observed = join(search_row, listing, datetime_func, site, section)
     expected = { 'url': url, 'site': site, 'section': section,
         'html': '<html></html>', 'downloaded': datetime_func()}
     n.assert_dict_equal(search_row, {'href': url, 'date': '3 months ago'}) # should not mutate
