@@ -3,10 +3,11 @@ import datetime
 import nose.tools as n
 
 import craigsgenerator.test.util as util
-from craigsgenerator.listings import listings
+from craigsgenerator.listings import listings, join
 
 fake_response = lambda url: util.FakeResponse(url = url, text = '<a href="%s">Look!</a>' % url)
 fake_datetime = datetime.datetime(2014,1,1)
+
 def fake_result(url):
     return {
         'html': fake_response(url).text,
@@ -54,3 +55,17 @@ def test_listings():
     n.assert_list_equal(gotten, list(map(fake_result, [
         'https://chicago.craigslist.org/sub/index000.html',
         'https://chicago.craigslist.org/sub/index100.html'])))
+
+def test_join():
+    url = 'http://example.com'
+    search_row = {'href': url, 'date': '3 months ago'}
+    response = fake_response(url)
+    site = 'chicago.craigslist.org'
+    section = 'sub'
+    datetime_func = lambda: fake_datetime
+
+    observed = join(search_row, listing_response, datetime_func, site, section)
+    expected = { 'url': url, 'site': site, 'section': section,
+        'html': response.text, 'downloaded': datetime_func()}
+    n.assert_dict_equal(search_row, {'href': url, 'date': '3 months ago'}) # should not mutate
+    n.assert_dict_equal(observed, expected)
