@@ -90,7 +90,7 @@ def test_cache():
     section = 'sub'
 
     parse_listing = lambda response: {'html':response.text,'foo':'bar'}
-    parse_search = lambda response: [{'href':response.url, 'date': None}]
+    parse_search = lambda response: [{'href':listing_url, 'date': None}]
 
     searched = set()
     def parse_next_search_url(scheme, site, section, html):
