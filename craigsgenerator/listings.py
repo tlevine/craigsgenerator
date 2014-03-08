@@ -13,8 +13,7 @@ from pickle_warehouse import Warehouse
 import craigsgenerator.download as download
 import craigsgenerator.parse as parse
 
-def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = requests.get,
-             datetime_func = datetime.datetime.now, date_func = datetime.date.today, n_threads = 10):
+def listings(scheme, get, n_threads, warehouse, site, section):
     '''
     Generate listings.
 
@@ -25,10 +24,7 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
         dicts of listing information
     '''
     try:
-        results = []
         html = None
-        warehouse = Warehouse(cachedir)
-
         while True:
             # Listings
             urls = {result['href']:result for result in results}
