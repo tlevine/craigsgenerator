@@ -22,9 +22,9 @@ def fake_download_many(_, urls, __, ___, ____):
 
 def test_listings():
     scheme = 'https'
-    gotten = []
+    gotten = set()
     def get(url):
-        gotten.append(url)
+        gotten.add(url)
         return fake_response(url)
     n_threads = 4
     warehouse = {}
@@ -44,17 +44,17 @@ def test_listings():
     l = listings(scheme, get, n_threads, warehouse, site, section,
                  parse_listing, parse_search, parse_next_search_url,
                  fake_download_many, None, lambda: fake_datetime)
-    n.assert_list_equal(gotten, [])
+    n.assert_set_equal(gotten, set())
 
-#   response = next(l)
-#   n.assert_equal(response, fake_result('https://chicago.craigslist.org/sub/index000.html'))
-#   n.assert_list_equal(gotten, ['https://chicago.craigslist.org/sub/index000.html'])
+    result = next(l)
+#   n.assert_equal(result, fake_result('https://chicago.craigslist.org/sub/index000.html'))
+    n.assert_set_equal(gotten, {'https://chicago.craigslist.org/sub/index000.html'})
 
-#   response = next(l)
+    response = next(l)
 #   n.assert_equal(response, fake_result('https://chicago.craigslist.org/sub/index100.html'))
-#   n.assert_list_equal(gotten, list(map(fake_result, [
-#       'https://chicago.craigslist.org/sub/index000.html',
-#       'https://chicago.craigslist.org/sub/index100.html'])))
+    n.assert_set_equal(gotten, {
+        'https://chicago.craigslist.org/sub/index000.html',
+        'https://chicago.craigslist.org/sub/index100.html'})
 
 def test_join():
     url = 'http://example.com'
