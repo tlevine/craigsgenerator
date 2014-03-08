@@ -36,54 +36,50 @@ def craigsgenerator(sites = None, sections = None, listings = _listings,
         A generator of dictionaries
     '''
     sleep_interval = 1
-    try:
-        kwargs = {
-            'cachedir': cachedir, 'scheme': scheme,
-            'get': get,
-        }
+    kwargs = {
+        'cachedir': cachedir, 'scheme': scheme,
+        'get': get,
+    }
 
-        if sites == None:
-            kwargs_sites = dict(kwargs)
-            del(kwargs_sites['scheme'])
-            sites = _sites(**kwargs)
-        if sections == None:
-            sections = _sections(**kwargs)
+    if sites == None:
+        kwargs_sites = dict(kwargs)
+        del(kwargs_sites['scheme'])
+        sites = _sites(**kwargs)
+    if sections == None:
+        sections = _sections(**kwargs)
 
-        warehouse = Warehouse(os.path.join(cachedir, 'listings'))
-        def get_listings(site, section):
-            return listings(scheme, get, threads_per_section, warehouse, site, section,
-                            parse.listing, parse.search, parse.next_search_url,
-                            download.download_many, download.threaded_download_worker, datetime.datetime.today)
+    warehouse = Warehouse(os.path.join(cachedir, 'listings'))
+    def get_listings(site, section):
+        return listings(scheme, get, threads_per_section, warehouse, site, section,
+                        parse.listing, parse.search, parse.next_search_url,
+                        download.download_many, download.threaded_download_worker, datetime.datetime.today)
 
-        if not superthreaded:
-            for site in sites:
-                for section in sections:
-                    for listing in get_listings(site, section):
-                        yield listing
-
-        else:
-            threads = {}
-            results = Queue()
-            def worker(thesite, thesection):
+    if not superthreaded:
+        for site in sites:
+            for section in sections:
                 for listing in get_listings(site, section):
-                    results.put(listing)
                     yield listing
 
-            for site in sites:
-                for section in sections:
-                    threads[(site, section)] = Thread(None, worker, args = (site, section))
-            for thread in threads.values():
-                thread.start()
-            while True:
-                try:
-                    yield results.get_nowait()
-                except Empty:
-                    if set(thread.is_alive() for thread in threads.values()) == {False}:
-                        break
-                    else:
-                        sleep(sleep_interval)
-                else:
-                    results.task_done()
+    else:
+        threads = {}
+        results = Queue()
+        def worker(thesite, thesection):
+            for listing in get_listings(site, section):
+                results.put(listing)
+                yield listing
 
-    except GeneratorExit:
-        pass
+        for site in sites:
+            for section in sections:
+                threads[(site, section)] = Thread(None, worker, args = (site, section))
+        for thread in threads.values():
+            thread.start()
+        while True:
+            try:
+                yield results.get_nowait()
+            except Empty:
+                if set(thread.is_alive() for thread in threads.values()) == {False}:
+                    break
+                else:
+                    sleep(sleep_interval)
+            else:
+                results.task_done()
