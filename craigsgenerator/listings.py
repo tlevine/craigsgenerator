@@ -41,7 +41,7 @@ def listings(scheme, get, n_threads, warehouse, site, section,
             url = parse_next_search_url(scheme, site, section, html)
             if url == None:
                 break
-            response = download.download(warehouse, url, get)
+            response = download.download(warehouse, url, get, None)
             results = parse_search(response)
             html = lxml.html.fromstring(response.text)
             html.make_links_absolute(url)
