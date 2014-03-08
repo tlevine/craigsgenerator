@@ -72,7 +72,6 @@ def test_join():
     n.assert_dict_equal(search_row, {'href': url, 'date': '3 months ago'}) # should not mutate
     n.assert_dict_equal(observed, expected)
 
-@n.nottest
 def test_cache():
     scheme = 'https'
     gotten = set()
@@ -83,7 +82,7 @@ def test_cache():
     search_url = 'https://chicago.craigslist.org/sub/index000.html'
     listing_url = 'https://chicago.craigslist.org/sub/42832238.html'
     warehouse = {
-        (search_url,2014,4):fake_response(search_url),
+        (search_url,fake_datetime.date().isoformat()):fake_response(search_url),
         listing_url:fake_response(listing_url),
     }
     site = 'chicago.craigslist.org'
@@ -103,4 +102,4 @@ def test_cache():
     l = listings(scheme, get, n_threads, warehouse, site, section,
                  parse_listing, parse_search, parse_next_search_url,
                  fake_download_many, None, lambda: fake_datetime)
-    n.assert_dict_equal(next(l), fake_result(url))
+    n.assert_dict_equal(next(l), fake_result(listing_url))
