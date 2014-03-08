@@ -1,0 +1,2 @@
+def sections(**kwargs):
+    return []

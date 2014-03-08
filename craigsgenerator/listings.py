@@ -60,28 +60,3 @@ def listings(site, section, cachedir = 'craigslist', scheme = 'https', get = req
 
     except GeneratorExit:
         pass
-
-def sites(get = requests.get, url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar', date_func = datetime.date.today()):
-    '''
-    Generate craigslist sites.
-    '''
-    results = set()
-    warehouse = Warehouse(cachedir)
-
-    response = parse.download(get, warehouse, url, date_func)
-    html = parse.load_response(response)
-
-    for href in html.xpath('id("%s")/descendant::a/@href' % id):
-        p = urlparse(href.rstrip('/'))
-        if p.fragment:
-            pass
-        elif p.path:
-            for netloc in sites(get = requests.get, url = href, cachedir = cachedir, id = 'list', date_func = date_func):
-                results.add(netloc)
-                yield netloc
-        elif p.netloc not in results:
-            results.add(p.netloc)
-            yield p.netloc
-
-def sections(**kwargs):
-    return []
