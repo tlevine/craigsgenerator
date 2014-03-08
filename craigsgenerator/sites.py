@@ -1,5 +1,5 @@
 import requests
-def sites(get = requests.get, url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar')):
+def sites(get = requests.get, url = 'https://sfbay.craigslist.org', cachedir = 'craigslist', id = 'rightbar'):
     '''
     Generate craigslist sites.
     '''
