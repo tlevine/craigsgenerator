@@ -24,11 +24,13 @@ def listings(scheme, get, n_threads, warehouse, site, section):
         dicts of listing information
     '''
     try:
+        results = []
         html = None
         while True:
             # Listings
             urls = {result['href']:result for result in results}
-            for response in download.download_many(get, warehouse, urls, date_func, n_threads):
+            responses = download.download_many(warehouse, urls, get, n_threads, download.threaded_download_worker)
+            for response in responses:
                 result = urls[response.url]
                 result.update(parse.listing(response))
 
@@ -47,7 +49,7 @@ def listings(scheme, get, n_threads, warehouse, site, section):
             url = parse.next_search_url(scheme, site, section, html)
             if url == None:
                 break
-            response = download.download(get, warehouse, url, date_func())
+            response = download.download(warehouse, url, get)
             results = parse.search(response)
             html = lxml.html.fromstring(response.text)
             html.make_links_absolute(url)
