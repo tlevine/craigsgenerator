@@ -15,28 +15,25 @@ def download(get, warehouse, urls, date, n_threads = 10):
     Out:
         A python-requests Response
     '''
-    if isinstance(urls, str):
-        one_url = True
-        urls = [urls]
     func = partial(parallel, n_threads) if n_threads > 1 else serial
-    results = func(get, warehouse, urls, date)
-    return results[0] if one_url else results
+    return func(get, warehouse, urls, date)
 
-def serial(warehouse, urls, get, date):
-    if urlsplit(url).scheme not in {'http','https'}:
-        raise ValueError('Scheme must be one of "http" or "https".')
+def serial(get, warehouse, urls, date):
+    for url in urls:
+        if urlsplit(url).scheme not in {'http','https'}:
+            raise ValueError('Scheme must be one of "http" or "https".')
 
-    key = url if date == None else (url, date)
-    if key in warehouse:
-        r = warehouse[key]
-    else:
-        r = get(url)
-        warehouse[key] = r
-    return r
+        key = url if date == None else (url, date)
+        if key in warehouse:
+            r = warehouse[key]
+        else:
+            r = get(url)
+            warehouse[key] = r
+        yield r
 
 def parallel(n_threads, get, warehouse, urls, date):
     def _download_one(url):
-        return download_one(get, warehouse, url, date)
+        return serial(get, warehouse, url, date)
 
     with ThreadPoolExecutor(n_threads) as e:
         for response in e.map(_download_one, urls):
