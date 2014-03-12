@@ -30,7 +30,8 @@ def listings(scheme, get, n_threads, warehouse, site, section,
         html = None
         while True:
             # Listings
-            for response in download(get, warehouse, urls, n_threads = n_threads):
+            urls = [result['href'] for result in results]
+            for response in download(get, warehouse, urls, None, n_threads = n_threads):
                 yield _join(response, parse_listing(response), datetime_func, site, section)
             results = []
 
@@ -40,7 +41,7 @@ def listings(scheme, get, n_threads, warehouse, site, section,
                 break
 
             # use a day-old cache
-            response = download.download(warehouse, url, get, datetime_func().date().isoformat())
+            response = download(get, warehouse, url, datetime_func().date().isoformat())
 
             results = parse_search(response)
             html = lxml.html.fromstring(response.text)

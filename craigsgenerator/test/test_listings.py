@@ -19,7 +19,7 @@ def fake_result(url):
         'foo': 'bar',
     }
 
-def fake_download(_, urls, __, ___, ____):
+def fake_download(_, __, urls, ___, n_threads = 5):
     return (fake_response(url) for url in urls)
 
 def test_listings():
