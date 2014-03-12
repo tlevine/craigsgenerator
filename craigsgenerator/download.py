@@ -3,7 +3,7 @@ try:
 except ImportError:
     from urlparse import urlsplit
 from itertools import repeat
-from threading import Thread
+from concurrent.futures import ThreadPoolExecutor
 try:
     from queue import Queue
 except ImportError:
@@ -34,33 +34,13 @@ def already_downloaded(warehouse, url):
     'Have I already made a similar enough request?'
     return url in warehouse
 
-def threaded_download_worker(warehouse, url, get, target):
-    '''
-    Send HTML elements to the target queue.
-    '''
-    response = download(warehouse, url, get, None)
-    target.put(response)
-
-def download_many(warehouse, urls, get, n_threads, worker):
+def download_many(warehouse, urls, get, n_threads):
     '''
     Only works for dateless caches
     '''
-    threads = {}
-    results = Queue()
+    def download_one(url):
+        return download(warehouse, url, get, None)
 
-    for url in urls:
-        kwargs = {
-            'target': worker,
-            'name': url,
-            'args': (warehouse, url, get, results),
-        }
-        threads[url] = Thread(None, **kwargs)
-
-    for thread in threads.values():
-        thread.start()
-
-    for thread in threads.values():
-        thread.join()
-
-    while not results.empty():
-        yield results.get()
+    with ThreadPoolExecutor(n_threads) as e:
+        for response in e.map(download_one, urls):
+            yield response
