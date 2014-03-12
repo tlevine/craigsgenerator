@@ -19,7 +19,7 @@ def fake_result(url):
         'foo': 'bar',
     }
 
-def fake_download_many(_, urls, __, ___, ____):
+def fake_download(_, urls, __, ___, ____):
     return (fake_response(url) for url in urls)
 
 def test_listings():
@@ -46,7 +46,7 @@ def test_listings():
 
     l = listings(scheme, get, n_threads, warehouse, site, section,
                  parse_listing, parse_search, parse_next_search_url,
-                 fake_download_many, None, lambda: fake_datetime)
+                 fake_download, lambda: fake_datetime)
     n.assert_set_equal(gotten, set())
 
     result = next(l)
@@ -102,5 +102,5 @@ def test_cache():
 
     l = listings(scheme, get, n_threads, warehouse, site, section,
                  parse_listing, parse_search, parse_next_search_url,
-                 fake_download_many, None, lambda: fake_datetime)
+                 fake_download, lambda: fake_datetime)
     n.assert_dict_equal(next(l), fake_result(listing_url))
