@@ -51,3 +51,7 @@ def test_cached_with_date():
 def test_not_cached():
     yield check_not_cached, 5
     yield check_not_cached, 1
+
+def test_download_one():
+    r = download(fake_get, {}, 'http://foo.bar', None)
+    n.assert_equal(r.text, 'lalala')
