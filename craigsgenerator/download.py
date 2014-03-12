@@ -30,10 +30,6 @@ def download_one(warehouse, url, get, date):
         warehouse[key] = r
     return r
 
-def already_downloaded(warehouse, url):
-    'Have I already made a similar enough request?'
-    return url in warehouse
-
 def download_many(warehouse, urls, get, n_threads):
     '''
     Only works for dateless caches
@@ -44,3 +40,7 @@ def download_many(warehouse, urls, get, n_threads):
     with ThreadPoolExecutor(n_threads) as e:
         for response in e.map(_download_one, urls):
             yield response
+
+def already_downloaded(warehouse, url):
+    'Have I already made a similar enough request?'
+    return url in warehouse

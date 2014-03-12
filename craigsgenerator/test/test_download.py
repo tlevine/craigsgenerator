@@ -27,10 +27,10 @@ def check_cached(download):
     r = download(fake_warehouse, 'http://foo.bar', fake_get, None)
     n.assert_equal(r.text, 'baz')
 
-def check_cached_with_date(download):
-    r = download(fake_warehouse_with_date, 'http://foo.bar', fake_get_should_not_run, '2014-03-01')
+def test_cached_with_date():
+    r = download_one(fake_warehouse_with_date, 'http://foo.bar', fake_get_should_not_run, '2014-03-01')
     n.assert_equal(r.text, 'baz')
-    r = download(fake_warehouse_with_date, 'http://foo.bar', fake_get, '2014-03-02')
+    r = download_one(fake_warehouse_with_date, 'http://foo.bar', fake_get, '2014-03-02')
     n.assert_equal(r.text, 'lalala')
 
 def check_not_cached(download):
@@ -39,15 +39,14 @@ def check_not_cached(download):
     n.assert_equal(r.text, 'lalala')
     n.assert_dict_equal(d, {'http://foo.bar': fake_get(None)})
 
+_download_many = lambda warehouse, url, get, date: download_many(warehouse, [url], get, 2)
+
 def test_bad_scheme():
-    for download in download_one, download_many:
+    for download in download_one, _download_many:
         yield check_bad_scheme, download
 def test_cached():
-    for download in download_one, download_many:
+    for download in download_one, _download_many:
         yield check_cached, download
-def test_cached_with_date():
-    for download in download_one, download_many:
-        yield check_cached_with_date, download
 def test_not_cached():
-    for download in download_one, download_many:
+    for download in download_one, _download_many:
         yield check_not_cached, download
