@@ -19,8 +19,11 @@ def fake_result(url):
         'foo': 'bar',
     }
 
-def fake_download(_, __, urls, ___, n_threads = 5):
-    return (fake_response(url) for url in urls)
+def fake_download(_, __, url_or_urls, ___, n_threads = 5):
+    if isinstance(urls, str):
+        return fake_response(url_or_urls
+    else:
+        return (fake_response(url) for url in url_or_urls)
 
 def test_listings():
     scheme = 'https'

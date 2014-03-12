@@ -4,13 +4,11 @@ try:
     from urllib.parse import urlparse
 except ImportError:
     from urllib2 import urlparse
-import datetime
 
 import lxml.html
 import requests
 from pickle_warehouse import Warehouse
 
-import craigsgenerator.download as download
 import craigsgenerator.parse as parse
 
 def listings(scheme, get, n_threads, warehouse, site, section,
@@ -41,9 +39,7 @@ def listings(scheme, get, n_threads, warehouse, site, section,
                 break
 
             # use a day-old cache
-            print(url)
             response = download(get, warehouse, url, datetime_func().date().isoformat())
-
             results = parse_search(response)
             html = lxml.html.fromstring(response.text)
             html.make_links_absolute(url)
