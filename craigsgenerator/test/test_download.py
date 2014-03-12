@@ -30,7 +30,7 @@ def check_cached(n_threads):
 def check_cached_with_date(n_threads):
     r = next(download(fake_get_should_not_run, fake_warehouse_with_date, ['http://foo.bar'], '2014-03-01', n_threads = n_threads))
     n.assert_equal(r.text, 'baz')
-    r = download(fake_get, fake_warehouse_with_date, ['http://foo.bar'], '2014-03-02', n_threads = n_threads)
+    r = next(download(fake_get, fake_warehouse_with_date, ['http://foo.bar'], '2014-03-02', n_threads = n_threads))
     n.assert_equal(r.text, 'lalala')
 
 def check_not_cached(n_threads):

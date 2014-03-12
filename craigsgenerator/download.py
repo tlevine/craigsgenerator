@@ -33,7 +33,7 @@ def serial(get, warehouse, urls, date):
 
 def parallel(n_threads, get, warehouse, urls, date):
     def _download_one(url):
-        return serial(get, warehouse, url, date)
+        return next(serial(get, warehouse, [url], date))
 
     with ThreadPoolExecutor(n_threads) as e:
         for response in e.map(_download_one, urls):
