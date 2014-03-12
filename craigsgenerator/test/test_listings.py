@@ -20,8 +20,8 @@ def fake_result(url):
     }
 
 def fake_download(_, __, url_or_urls, ___, n_threads = 5):
-    if isinstance(urls, str):
-        return fake_response(url_or_urls
+    if isinstance(url_or_urls, str):
+        return fake_response(url_or_urls)
     else:
         return (fake_response(url) for url in url_or_urls)
 

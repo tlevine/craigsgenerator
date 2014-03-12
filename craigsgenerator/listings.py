@@ -29,8 +29,9 @@ def listings(scheme, get, n_threads, warehouse, site, section,
         while True:
             # Listings
             urls = [result['href'] for result in results]
-            for response in download(get, warehouse, urls, None, n_threads = n_threads):
-                yield _join(response, parse_listing(response), datetime_func, site, section)
+            d = download(get, warehouse, urls, None, n_threads = n_threads)
+            for search_result, listing_result in zip(results, d):
+                yield _join(search_result, parse_listing(listing_result), datetime_func, site, section)
             results = []
 
             # Search
@@ -60,7 +61,6 @@ def _join(search_dict, listing_dict, datetime_func, site, section):
     r['url'] = r['href']
     r['site'] = site
     r['section'] = section
-
-    del(r['href'])
     del(r['date'])
+    del(r['href'])
     return r
