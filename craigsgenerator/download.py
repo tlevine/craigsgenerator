@@ -9,7 +9,7 @@ try:
 except ImportError:
     from Queue import Queue
 
-def download(warehouse, url, get, date):
+def download_one(warehouse, url, get, date):
     '''
     In:
         get: function that takes a url and returns a python-requests Response
@@ -38,9 +38,9 @@ def download_many(warehouse, urls, get, n_threads):
     '''
     Only works for dateless caches
     '''
-    def download_one(url):
-        return download(warehouse, url, get, None)
+    def _download_one(url):
+        return download_one(warehouse, url, get, None)
 
     with ThreadPoolExecutor(n_threads) as e:
-        for response in e.map(download_one, urls):
+        for response in e.map(_download_one, urls):
             yield response

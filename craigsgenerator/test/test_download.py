@@ -40,14 +40,14 @@ def check_not_cached(download):
     n.assert_dict_equal(d, {'http://foo.bar': fake_get(None)})
 
 def test_bad_scheme():
-    for download in download_one, download_many
+    for download in download_one, download_many:
         yield check_bad_scheme, download
 def test_cached():
-    for download in download_one, download_many
+    for download in download_one, download_many:
         yield check_cached, download
 def test_cached_with_date():
-    for download in download_one, download_many
+    for download in download_one, download_many:
         yield check_cached_with_date, download
 def test_not_cached():
-    for download in download_one, download_many
+    for download in download_one, download_many:
         yield check_not_cached, download
