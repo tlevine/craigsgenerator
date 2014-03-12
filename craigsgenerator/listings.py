@@ -41,6 +41,7 @@ def listings(scheme, get, n_threads, warehouse, site, section,
                 break
 
             # use a day-old cache
+            print(url)
             response = download(get, warehouse, url, datetime_func().date().isoformat())
 
             results = parse_search(response)

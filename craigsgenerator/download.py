@@ -22,6 +22,7 @@ def download(get, warehouse, urls, date, n_threads = 10):
     one_url = isinstance(urls,basestring)
     if one_url:
         urls = [urls]
+        n_threads = 1
 
     func = partial(parallel, n_threads) if n_threads > 1 else serial
     generator = func(get, warehouse, urls, date)

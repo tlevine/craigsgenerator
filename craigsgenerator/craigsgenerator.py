@@ -10,7 +10,7 @@ except ImportError:
 
 from pickle_warehouse import Warehouse
 
-import craigsgenerator.download as download
+from craigsgenerator.download import download
 import craigsgenerator.parse as parse
 from craigsgenerator.listings import listings as _listings
 from craigsgenerator.sites import sites as _sites
@@ -52,7 +52,7 @@ def craigsgenerator(sites = None, sections = None, listings = _listings,
     def get_listings(site, section):
         return listings(scheme, get, threads_per_section, warehouse, site, section,
                         parse.listing, parse.search, parse.next_search_url,
-                        download.download_many, download.threaded_download_worker, datetime.datetime.today)
+                        download, datetime.datetime.today)
 
     if not superthreaded:
         for site in sites:
