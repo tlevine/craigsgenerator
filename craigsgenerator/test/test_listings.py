@@ -29,6 +29,7 @@ def test_listings():
     scheme = 'https'
     gotten = set()
     def get(url):
+        print('getting', url)
         gotten.add(url)
         return fake_response(url)
     n_threads = 4
