@@ -2,6 +2,10 @@ try:
     from urllib.parse import urlsplit
 except ImportError:
     from urlparse import urlsplit
+try:
+    basestring
+except NameError:
+    basestring = str
 from functools import partial
 from concurrent.futures import ThreadPoolExecutor
 
@@ -15,8 +19,17 @@ def download(get, warehouse, urls, date, n_threads = 10):
     Out:
         A python-requests Response
     '''
+    one_url = isinstance(urls,basestring)
+    if one_url:
+        urls = [urls]
+
     func = partial(parallel, n_threads) if n_threads > 1 else serial
-    return func(get, warehouse, urls, date)
+    generator = func(get, warehouse, urls, date)
+
+    if one_url:
+        return next(generator)
+    else:
+        return generator
 
 def serial(get, warehouse, urls, date):
     for url in urls:
