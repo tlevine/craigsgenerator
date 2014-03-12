@@ -1,12 +1,12 @@
 import os
-from threading import Thread
+import concurrent.futures as f
 import datetime
 from time import sleep
 import requests
 try:
-    from queue import Queue, Empty
+    from queue import Queue
 except ImportError:
-    from Queue import Queue, Empty
+    from Queue import Queue
 
 from pickle_warehouse import Warehouse
 
@@ -61,25 +61,17 @@ def craigsgenerator(sites = None, sections = None, listings = _listings,
                     yield listing
 
     else:
-        threads = {}
         results = Queue()
-        def worker(thesite, thesection):
-            for listing in get_listings(thesite, thesection):
+        def sink_listings(site,section):
+            for listing in get_listings(site,section):
                 results.put(listing)
+            logger.info('Finished %s/%s' % (site,section))
 
-        for site in sites:
-            for section in sections:
-                threads[(site, section)] = Thread(None, worker, args = (site, section))
-        for thread in threads.values():
-            thread.start()
-
-        while True:
-            try:
-                yield results.get_nowait()
-            except Empty:
-                if set(thread.is_alive() for thread in threads.values()) == {False}:
-                    break
-                else:
-                    sleep(sleep_interval)
-            else:
+        with f.ThreadPoolExecutor(threads_per_section) as e:
+            futures = {}
+            for site in sites:
+                for section in sections:
+                    futures[(site,section)] = e.submit(sink_listings, site, section)
+            while not (all(future.done() for future in futures.values()) and results.empty()):
+                yield results.get()
                 results.task_done()
