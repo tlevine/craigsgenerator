@@ -11,7 +11,7 @@ from pickle_warehouse import Warehouse
 
 import craigsgenerator.parse as parse
 
-def listings(scheme, get, n_threads, warehouse, site, section,
+def listings(scheme:str, get, n_threads:int, warehouse, site:str, section:str,
              parse_listing, parse_search, parse_next_search_url,
              download, datetime_func):
     '''
