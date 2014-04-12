@@ -1,5 +1,11 @@
+try:
+    from urllib.parse import urlsplit
+except ImportError:
+    from urlparse import urlsplit
+
 import requests
 import lxml.html
+from pickle_warehouse import Warehouse
 
 from craigsgenerator.download import download
 
@@ -7,7 +13,6 @@ def sites(get = requests.get, url = 'http://sfbay.craigslist.org', cachedir = 'c
     '''
     Generate craigslist sites.
     '''
-    raise NotImplementedError
     results = set()
     warehouse = Warehouse(cachedir)
 
@@ -15,7 +20,7 @@ def sites(get = requests.get, url = 'http://sfbay.craigslist.org', cachedir = 'c
     html = lxml.html.fromstring(response.text)
 
     for href in html.xpath('id("%s")/descendant::a/@href' % id):
-        p = urlparse(href.rstrip('/'))
+        p = urlsplit(href.rstrip('/'))
         if p.fragment:
             pass
         elif p.path:
