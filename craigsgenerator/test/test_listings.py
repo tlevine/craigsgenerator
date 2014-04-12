@@ -55,13 +55,11 @@ def test_listings():
 
     result = next(l)
     n.assert_equal(result, fake_result('https://chicago.craigslist.org/sub/index000.html'))
-    n.assert_set_equal(gotten, {'https://chicago.craigslist.org/sub/index000.html'})
+    n.assert_set_equal(gotten, set())
 
     response = next(l)
     n.assert_equal(response, fake_result('https://chicago.craigslist.org/sub/index100.html'))
-    n.assert_set_equal(gotten, {
-        'https://chicago.craigslist.org/sub/index000.html',
-        'https://chicago.craigslist.org/sub/index100.html'})
+    n.assert_set_equal(gotten, {'https://chicago.craigslist.org/sub/index100.html'})
 
 def test_join():
     url = 'http://example.com'
