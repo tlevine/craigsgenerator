@@ -18,4 +18,4 @@ def sites(get = requests.get, url = 'http://www.craigslist.org/about/sites', cac
     response = download(get, warehouse, url, None)
     html = lxml.html.fromstring(response.text)
 
-    return set(filter(None, urlsplit(href).netloc for href in html.xpath('//a/@href')))
+    return set(filter(None, (urlsplit(href).netloc for href in html.xpath('//a/@href'))))
