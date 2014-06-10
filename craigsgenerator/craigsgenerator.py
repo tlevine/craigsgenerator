@@ -1,5 +1,8 @@
 import os
-import concurrent.futures as f
+try:
+    import concurrent.futures as f
+except ImportError:
+    import futures as f
 import datetime
 from time import sleep
 import requests

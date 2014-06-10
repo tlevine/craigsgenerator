@@ -1,5 +1,9 @@
 from distutils.core import setup
 
+install_requires = ['requests','lxml','python-dateutil']
+if sys.version[0] == '2':
+    install_requires.append('futures')
+
 setup(name='craigsgenerator',
     author='Thomas Levine',
     author_email='_@thomaslevine.com',
@@ -9,7 +13,7 @@ setup(name='craigsgenerator',
         'Intended Audience :: Developers',
     ],
     packages=['craigsgenerator'],
-    install_requires = ['requests','lxml','python-dateutil'],
+    install_requires = install_requires,
     tests_require = ['nose'],
     version='0.1.1',
     license='AGPL'
