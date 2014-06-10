@@ -13,11 +13,26 @@ except ImportError:
 
 from pickle_warehouse import Warehouse
 
-from craigsgenerator.download import download
-import craigsgenerator.parse as parse
-from craigsgenerator.listings import listings as _listings
-from craigsgenerator.sites import sites as _sites
-from craigsgenerator.sections import sections as _sections
+try:
+    from craigsgenerator.download import download
+except ImportError:
+    from download import download
+try:
+    import craigsgenerator.parse as parse
+except ImportError:
+    import parse as parse
+try:
+    from craigsgenerator.listings import listings as _listings
+except ImportError:
+    from listings import listings as _listings
+try:
+    from craigsgenerator.sites import sites as _sites
+except ImportError:
+    from sites import sites as _sites
+try:
+    from craigsgenerator.sections import sections as _sections
+except ImportError:
+    from sections import sections as _sections
 
 def craigsgenerator(sites = None, sections = None, listings = _listings,
                     cachedir = 'craigslist', scheme = 'https',
